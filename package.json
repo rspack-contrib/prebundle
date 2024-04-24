@@ -1,0 +1,32 @@
+{
+  "name": "prebundle",
+  "version": "0.0.2",
+  "main": "./dist/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "prebundle": "./bin.js"
+  },
+  "packageManager": "pnpm@9.0.5",
+  "dependencies": {
+    "@vercel/ncc": "0.38.1",
+    "dts-packer": "0.0.3",
+    "fast-glob": "^3.3.2",
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "18.x",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.2"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}
