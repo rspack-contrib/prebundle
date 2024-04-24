@@ -12,8 +12,8 @@
     "skipLibCheck": true,
     "jsx": "preserve",
     "resolveJsonModule": true,
-    "module": "CommonJS",
-    "moduleResolution": "Node"
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   },
   "include": ["src"]
 }

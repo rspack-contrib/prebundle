@@ -1,10 +1,13 @@
 import { dirname, join } from 'node:path';
 import fs from 'fs-extra';
-import { DIST_DIR, PACKAGES_DIR } from './constant';
-import type { ParsedTask, TaskConfig } from './types';
+import { cwd, DIST_DIR } from './constant.js';
+import type { DependencyConfig, ParsedTask } from './types.js';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
 
 export function findDepPath(name: string) {
-  let entry = dirname(require.resolve(join(name)));
+  let entry = dirname(require.resolve(join(name), { paths: [cwd] }));
 
   while (!dirname(entry).endsWith('node_modules')) {
     entry = dirname(entry);
@@ -18,53 +21,47 @@ export function findDepPath(name: string) {
 }
 
 export const resolveConfig = async () => {
-  const configPath = join(__dirname, 'prebundle.config.mjs');
+  const configPath = join(cwd, 'prebundle.config.mjs');
   const config = await import(configPath);
   return config.default;
 };
 
-export function parseTasks(tasks: TaskConfig[]) {
+export function parseTasks(dependencies: Array<string | DependencyConfig>) {
   const result: ParsedTask[] = [];
 
-  for (const { packageName, packageDir, dependencies } of tasks) {
-    for (const dep of dependencies) {
-      const depName = typeof dep === 'string' ? dep : dep.name;
-      const importPath = join(packageName, DIST_DIR, depName);
-      const packagePath = join(PACKAGES_DIR, packageDir);
-      const distPath = join(packagePath, DIST_DIR, depName);
-      const depPath = findDepPath(depName);
-      const depEntry = require.resolve(depName);
-      const info = {
-        depName,
-        depPath,
-        depEntry,
-        distPath,
-        importPath,
-        packageDir,
-        packagePath,
-        packageName,
-      };
+  for (const dep of dependencies) {
+    const depName = typeof dep === 'string' ? dep : dep.name;
+    const importPath = join(cwd, DIST_DIR, depName);
+    const distPath = join(cwd, DIST_DIR, depName);
+    const depPath = findDepPath(depName);
+    const depEntry = require.resolve(depName, { paths: [cwd] });
+    const info = {
+      depName,
+      depPath,
+      depEntry,
+      distPath,
+      importPath,
+    };
 
-      if (typeof dep === 'string') {
-        result.push({
-          minify: true,
-          externals: {},
-          emitFiles: [],
-          packageJsonField: [],
-          ...info,
-        });
-      } else {
-        result.push({
-          minify: dep.minify ?? true,
-          ignoreDts: dep.ignoreDts,
-          externals: dep.externals ?? {},
-          emitFiles: dep.emitFiles ?? [],
-          afterBundle: dep.afterBundle,
-          beforeBundle: dep.beforeBundle,
-          packageJsonField: dep.packageJsonField ?? [],
-          ...info,
-        });
-      }
+    if (typeof dep === 'string') {
+      result.push({
+        minify: true,
+        externals: {},
+        emitFiles: [],
+        packageJsonField: [],
+        ...info,
+      });
+    } else {
+      result.push({
+        minify: dep.minify ?? true,
+        ignoreDts: dep.ignoreDts,
+        externals: dep.externals ?? {},
+        emitFiles: dep.emitFiles ?? [],
+        afterBundle: dep.afterBundle,
+        beforeBundle: dep.beforeBundle,
+        packageJsonField: dep.packageJsonField ?? [],
+        ...info,
+      });
     }
   }
 

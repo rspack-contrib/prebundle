@@ -22,9 +22,7 @@ export type DependencyConfig = {
   afterBundle?: (task: ParsedTask) => void | Promise<void>;
 };
 
-export type TaskConfig = {
-  packageDir: string;
-  packageName: string;
+export type Config = {
   dependencies: Array<string | DependencyConfig>;
 };
 
@@ -33,10 +31,7 @@ export type ParsedTask = {
   depEntry: string;
   distPath: string;
   importPath: string;
-  packageDir: string;
   ignoreDts?: boolean;
-  packagePath: string;
-  packageName: string;
   minify: NonNullable<DependencyConfig['minify']>;
   depName: NonNullable<DependencyConfig['name']>;
   externals: NonNullable<DependencyConfig['externals']>;

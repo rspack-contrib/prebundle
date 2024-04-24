@@ -15,46 +15,16 @@ Prebundle is used to:
 Run following command to prebundle all dependencies:
 
 ```bash
-pnpm start
+npx prebundle
 ```
 
 Run following command to prebundle single dependencies:
 
 ```bash
-pnpm start <pkgName>
+npx prebundle <pkgName>
 
 # For example, prebundle commander
-pnpm start commander
-```
-
-## Add a new dependency
-
-1. Remove the dependency from the `dependencies` of original package.
-2. Add the dependency to the `devDependencies` of `@rsbuild/prebundle`. If this package has a `@types/package-name` package, it also needs to be added. It is recommended to lock the version of dependencies.
-3. Add the task config to `src/constant.ts`:
-
-```ts
-const TASKS: TaskConfig[] = [
-  {
-    packageDir: 'toolkit/utils',
-    packageName: '@rsbuild/utils',
-    dependencies: [
-      // Add the package name
-      'address',
-    ],
-  },
-];
-```
-
-4. Run `pnpm start`.
-5. Import from the compiled directory:
-
-```ts
-// Old
-import foo from 'foo';
-
-// New
-import foo from '../compiled/foo';
+npx prebundle commander
 ```
 
 ## Dependency Config
@@ -160,12 +130,3 @@ dependencies: [
   },
 ];
 ```
-
-## Note
-
-We will not prebundle the following packages because their dependencies are complex or are depended by many community packages:
-
-- @babel/some-package
-- webpack
-- lodash
-- caniuse-lite

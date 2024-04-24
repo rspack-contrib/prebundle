@@ -3,9 +3,9 @@ import ncc from '@vercel/ncc';
 import { Package as DtsPacker } from 'dts-packer';
 import fastGlob from 'fast-glob';
 import fs from 'fs-extra';
-import { DEFAULT_EXTERNALS } from './constant';
-import { pick, replaceFileContent } from './helper';
-import type { ParsedTask } from './types';
+import { cwd, DEFAULT_EXTERNALS } from './constant.js';
+import { pick, replaceFileContent } from './helper.js';
+import type { ParsedTask } from './types.js';
 
 function emitAssets(
   assets: Record<string, { source: string }>,
@@ -54,7 +54,7 @@ function emitDts(task: ParsedTask) {
       ...task.externals,
     };
     const { files } = new DtsPacker({
-      cwd: process.cwd(),
+      cwd,
       name: task.depName,
       typesRoot: task.distPath,
       externals: Object.keys(externals),
