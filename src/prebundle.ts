@@ -42,17 +42,13 @@ function fixTypeExternalPath(
   });
 }
 
-function emitDts(task: ParsedTask) {
+function emitDts(task: ParsedTask, externals: Record<string, string>) {
   if (task.ignoreDts) {
     fs.writeFileSync(join(task.distPath, 'index.d.ts'), 'export = any;\n');
     return;
   }
 
   try {
-    const externals = {
-      ...DEFAULT_EXTERNALS,
-      ...task.externals,
-    };
     const { files } = new DtsPacker({
       cwd,
       name: task.depName,
@@ -161,20 +157,22 @@ export async function prebundle(
     await task.beforeBundle(task);
   }
 
+  const mergedExternals = {
+    ...DEFAULT_EXTERNALS,
+    ...commonExternals,
+    ...task.externals,
+  }
+
   const { code, assets } = await ncc(task.depEntry, {
     minify: task.minify,
     target: 'es2019',
-    externals: {
-      ...DEFAULT_EXTERNALS,
-      ...commonExternals,
-      ...task.externals,
-    },
+    externals: mergedExternals,
     assetBuilds: false,
   });
 
   emitIndex(code, task.distPath);
   emitAssets(assets, task.distPath);
-  emitDts(task);
+  emitDts(task, mergedExternals);
   emitLicense(task);
   emitPackageJson(task);
   removeSourceMap(task);
