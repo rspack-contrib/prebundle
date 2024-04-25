@@ -7,6 +7,10 @@
     "dev": "tsc --watch",
     "build": "tsc"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rspack-contrib/prebundle"
+  },
   "files": [
     "dist",
     "bin.js"
