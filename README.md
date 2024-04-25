@@ -1,6 +1,15 @@
 # Prebundle
 
-This package is used to prebundle 3rd party dependencies, based on [ncc](https://github.com/vercel/ncc) and `dts-packer`.
+Prebundle 3rd party dependencies, output a single js file, a package.json file and the dts files.
+
+Based on [ncc](https://github.com/vercel/ncc) and `dts-packer`.
+
+<p>
+  <a href="https://npmjs.com/package/prebundle">
+   <img src="https://img.shields.io/npm/v/prebundle?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" />
+  </a>
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="license" />
+</p>
 
 ## Motivation
 
