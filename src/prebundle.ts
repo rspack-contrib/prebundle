@@ -143,7 +143,7 @@ const pkgName = process.argv[2];
 
 export async function prebundle(
   task: ParsedTask,
-  commonExternals: Record<string, string>,
+  commonExternals: Record<string, string> = {},
 ) {
   if (pkgName && task.depName !== pkgName) {
     return;
