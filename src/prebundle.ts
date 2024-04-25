@@ -145,7 +145,10 @@ function renameDistFolder(task: ParsedTask) {
 
 const pkgName = process.argv[2];
 
-export async function prebundle(task: ParsedTask) {
+export async function prebundle(
+  task: ParsedTask,
+  commonExternals: Record<string, string>,
+) {
   if (pkgName && task.depName !== pkgName) {
     return;
   }
@@ -163,6 +166,7 @@ export async function prebundle(task: ParsedTask) {
     target: 'es2019',
     externals: {
       ...DEFAULT_EXTERNALS,
+      ...commonExternals,
       ...task.externals,
     },
     assetBuilds: false,
