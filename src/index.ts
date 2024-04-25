@@ -6,7 +6,7 @@ export async function run() {
   const parsedTasks = parseTasks(config.dependencies);
 
   for (const task of parsedTasks) {
-    await prebundle(task);
+    await prebundle(task, config.externals);
   }
 }
 

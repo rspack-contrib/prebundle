@@ -58,6 +58,18 @@ export default {
 };
 ```
 
+You can also configure `externals` for all packages like this:
+
+```ts
+// prebundle.config.mjs
+export default {
+  externals: {
+    webpack: '../webpack',
+  },
+  dependencies: [{ name: 'foo' }, { name: 'foo' }],
+};
+```
+
 ### minify
 
 Whether to minify the code, default `true`.

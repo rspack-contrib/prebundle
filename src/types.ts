@@ -23,6 +23,11 @@ export type DependencyConfig = {
 };
 
 export type Config = {
+  /**
+   * Configure externals for all packages,
+   * will be merged with dependencies[i].externals.
+   */
+  externals: Record<string, string>;
   dependencies: Array<string | DependencyConfig>;
 };
 
