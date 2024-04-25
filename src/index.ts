@@ -9,3 +9,5 @@ export async function run() {
     await prebundle(task);
   }
 }
+
+export type { Config } from './types.js';

@@ -1,4 +1,4 @@
-# dep-pre-bundler
+# Prebundle
 
 This package is used to prebundle 3rd party dependencies, based on [ncc](https://github.com/vercel/ncc) and `dts-packer`.
 
@@ -36,14 +36,17 @@ Supported dependency config:
 Externals to leave as requires of the build.
 
 ```ts
-dependencies: [
-  {
-    name: 'foo',
-    externals: {
-      webpack: '../webpack',
+// prebundle.config.mjs
+export default {
+  dependencies: [
+    {
+      name: 'foo',
+      externals: {
+        webpack: '../webpack',
+      },
     },
-  },
-];
+  ],
+};
 ```
 
 ### minify
@@ -51,12 +54,15 @@ dependencies: [
 Whether to minify the code, default `true`.
 
 ```ts
-dependencies: [
-  {
-    name: 'foo',
-    minify: false,
-  },
-];
+// prebundle.config.mjs
+export default {
+  dependencies: [
+    {
+      name: 'foo',
+      minify: false,
+    },
+  ],
+};
 ```
 
 ### packageJsonField
@@ -64,12 +70,15 @@ dependencies: [
 Copy extra fields from original package.json to target package.json.
 
 ```ts
-dependencies: [
-  {
-    name: 'foo',
-    packageJsonField: ['options'],
-  },
-];
+// prebundle.config.mjs
+export default {
+  dependencies: [
+    {
+      name: 'foo',
+      packageJsonField: ['options'],
+    },
+  ],
+};
 ```
 
 Following fields will be copied by default:
@@ -88,14 +97,17 @@ Following fields will be copied by default:
 Callback before bundle.
 
 ```ts
-dependencies: [
-  {
-    name: 'foo',
-    beforeBundle(task) {
-      console.log('do something');
+// prebundle.config.mjs
+export default {
+  dependencies: [
+    {
+      name: 'foo',
+      beforeBundle(task) {
+        console.log('do something');
+      },
     },
-  },
-];
+  ],
+};
 ```
 
 ### emitFiles
@@ -103,17 +115,20 @@ dependencies: [
 Emit extra entry files to map imports.
 
 ```ts
-dependencies: [
-  {
-    name: 'foo',
-    emitFiles: [
-      {
-        path: 'foo.js',
-        content: `module.exports = require('./').foo;`,
-      },
-    ],
-  },
-];
+// prebundle.config.mjs
+export default {
+  dependencies: [
+    {
+      name: 'foo',
+      emitFiles: [
+        {
+          path: 'foo.js',
+          content: `module.exports = require('./').foo;`,
+        },
+      ],
+    },
+  ],
+};
 ```
 
 ### ignoreDts
@@ -123,10 +138,13 @@ Ignore the original .d.ts declaration file, then generate a fake .d.ts file.
 This can be used to reduce file size for the packages that do not require type definitions, such as webpack plugin.
 
 ```ts
-dependencies: [
-  {
-    name: 'foo',
-    ignoreDts: true,
-  },
-];
+// prebundle.config.mjs
+export default {
+  dependencies: [
+    {
+      name: 'foo',
+      ignoreDts: true,
+    },
+  ],
+};
 ```
