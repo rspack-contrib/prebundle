@@ -3,6 +3,7 @@ import fs from '../compiled/fs-extra/index.js';
 import { cwd, DIST_DIR } from './constant.js';
 import type { Config, DependencyConfig, ParsedTask } from './types.js';
 import { createRequire } from 'node:module';
+import { pathToFileURL } from 'node:url';
 
 const require = createRequire(import.meta.url);
 
@@ -22,7 +23,7 @@ export function findDepPath(name: string) {
 
 export const resolveConfig = async () => {
   const configPath = join(cwd, 'prebundle.config.mjs');
-  const config = await import(configPath);
+  const config = await import(pathToFileURL(configPath).href);
   return config.default as Config;
 };
 
