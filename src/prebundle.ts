@@ -1,8 +1,8 @@
 import { join } from 'node:path';
 import ncc from '@vercel/ncc';
 import { Package as DtsPacker } from 'dts-packer';
-import fastGlob from 'fast-glob';
-import fs from 'fs-extra';
+import fastGlob from '../compiled/fast-glob/index.js';
+import fs from '../compiled/fs-extra/index.js';
 import { cwd, DEFAULT_EXTERNALS } from './constant.js';
 import { pick, replaceFileContent } from './helper.js';
 import type { ParsedTask } from './types.js';
