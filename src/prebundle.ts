@@ -67,7 +67,11 @@ async function emitDts(task: ParsedTask, externals: Record<string, string>) {
   try {
     const inputConfig: InputOptions = {
       input,
-      external: [...Object.keys(externals), ...NODE_BUILTINS],
+      external: [
+        ...Object.keys(externals),
+        ...task.dtsExternals,
+        ...NODE_BUILTINS,
+      ],
       plugins: [
         dts({
           respectExternal: true,

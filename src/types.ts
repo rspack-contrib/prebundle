@@ -10,6 +10,8 @@ export type DependencyConfig = {
   minify?: boolean;
   /** Externals to leave as requires of the build. */
   externals?: Record<string, string>;
+  /** Externals types */
+  dtsExternals?: Array<string | RegExp>;
   /** Emit extra entry files to map imports. */
   emitFiles?: ImportMap[];
   /** Copy extra fields from original package.json to target package.json. */
@@ -43,6 +45,7 @@ export type ParsedTask = {
   minify: NonNullable<DependencyConfig['minify']>;
   depName: NonNullable<DependencyConfig['name']>;
   externals: NonNullable<DependencyConfig['externals']>;
+  dtsExternals: NonNullable<DependencyConfig['dtsExternals']>;
   emitFiles: NonNullable<DependencyConfig['emitFiles']>;
   afterBundle?: NonNullable<DependencyConfig['afterBundle']>;
   beforeBundle?: NonNullable<DependencyConfig['beforeBundle']>;
