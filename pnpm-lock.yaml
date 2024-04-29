@@ -14,12 +14,6 @@ importers:
       dts-packer:
         specifier: 0.0.3
         version: 0.0.3
-      fast-glob:
-        specifier: ^3.3.2
-        version: 3.3.2
-      fs-extra:
-        specifier: ^11.2.0
-        version: 11.2.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -27,6 +21,12 @@ importers:
       '@types/node':
         specifier: 18.x
         version: 18.19.31
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.2
+      fs-extra:
+        specifier: ^11.2.0
+        version: 11.2.0
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
