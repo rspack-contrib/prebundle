@@ -1,5 +1,5 @@
 import { dirname, join } from 'node:path';
-import fs from 'fs-extra';
+import fs from '../compiled/fs-extra/index.js';
 import { cwd, DIST_DIR } from './constant.js';
 import type { Config, DependencyConfig, ParsedTask } from './types.js';
 import { createRequire } from 'node:module';

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
+    "prebundle": "node ./bin.js",
     "prepublishOnly": "npm run build"
   },
   "repository": {
@@ -14,7 +15,8 @@
   },
   "files": [
     "dist",
-    "bin.js"
+    "bin.js",
+    "compiled"
   ],
   "bin": {
     "prebundle": "./bin.js"
@@ -22,13 +24,13 @@
   "packageManager": "pnpm@9.0.5",
   "dependencies": {
     "@vercel/ncc": "0.38.1",
-    "dts-packer": "0.0.3",
-    "fast-glob": "^3.3.2",
-    "fs-extra": "^11.2.0"
+    "dts-packer": "0.0.3"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/node": "18.x",
+    "fast-glob": "^3.3.2",
+    "fs-extra": "^11.2.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.2"
   },
