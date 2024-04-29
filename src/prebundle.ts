@@ -3,9 +3,12 @@ import ncc from '@vercel/ncc';
 import { Package as DtsPacker } from 'dts-packer';
 import fastGlob from '../compiled/fast-glob/index.js';
 import fs from '../compiled/fs-extra/index.js';
+import rslog from '../compiled/rslog/index.js';
 import { cwd, DEFAULT_EXTERNALS } from './constant.js';
 import { pick, replaceFileContent } from './helper.js';
 import type { ParsedTask } from './types.js';
+
+const { logger } = rslog;
 
 function emitAssets(
   assets: Record<string, { source: string }>,
@@ -60,8 +63,8 @@ function emitDts(task: ParsedTask, externals: Record<string, string>) {
       fixTypeExternalPath(file, task, externals);
     }
   } catch (error) {
-    console.error(`DtsPacker failed: ${task.depName}`);
-    console.error(error);
+    logger.error(`DtsPacker failed: ${task.depName}`);
+    logger.error(error);
   }
 }
 
@@ -149,7 +152,7 @@ export async function prebundle(
     return;
   }
 
-  console.log(`==== Start prebundle "${task.depName}" ====`);
+  logger.info(`prebundle: ${task.depName}`);
 
   fs.removeSync(task.distPath);
 
@@ -183,5 +186,5 @@ export async function prebundle(
     await task.afterBundle(task);
   }
 
-  console.log(`==== Finish prebundle "${task.depName}" ====\n\n`);
+  logger.success(`prebundle: ${task.depName}\n\n`);
 }

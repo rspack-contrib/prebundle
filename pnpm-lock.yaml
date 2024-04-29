@@ -14,12 +14,6 @@ importers:
       dts-packer:
         specifier: 0.0.3
         version: 0.0.3
-      fast-glob:
-        specifier: ^3.3.2
-        version: 3.3.2
-      fs-extra:
-        specifier: ^11.2.0
-        version: 11.2.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -27,9 +21,18 @@ importers:
       '@types/node':
         specifier: 18.x
         version: 18.19.31
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.2
+      fs-extra:
+        specifier: ^11.2.0
+        version: 11.2.0
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
+      rslog:
+        specifier: ^1.2.2
+        version: 1.2.2
       typescript:
         specifier: ^5.4.2
         version: 5.4.5
@@ -273,6 +276,10 @@ packages:
   reusify@1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
+
+  rslog@1.2.2:
+    resolution: {integrity: sha512-tZP8KjrI1nz6qOYCrFxAV7cfmfS2GV94jotU2zOmF/6ByO1zNvGR6/+0inylpjqyBjAdnnutTUW0m4th06bSTw==}
+    engines: {node: '>=14.17.6'}
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -563,6 +570,8 @@ snapshots:
       lowercase-keys: 2.0.0
 
   reusify@1.0.4: {}
+
+  rslog@1.2.2: {}
 
   run-parallel@1.2.0:
     dependencies:
