@@ -3,7 +3,7 @@ import ncc from '@vercel/ncc';
 import fastGlob from '../compiled/fast-glob/index.js';
 import fs from '../compiled/fs-extra/index.js';
 import rslog from '../compiled/rslog/index.js';
-import { DEFAULT_EXTERNALS } from './constant.js';
+import { DEFAULT_EXTERNALS, NODE_BUILTINS } from './constant.js';
 import { findDepPath, pick } from './helper.js';
 import type { ParsedTask } from './types.js';
 import { dts } from 'rollup-plugin-dts';
@@ -67,7 +67,7 @@ async function emitDts(task: ParsedTask, externals: Record<string, string>) {
   try {
     const inputConfig: InputOptions = {
       input,
-      external: Object.keys(externals),
+      external: [...Object.keys(externals), ...NODE_BUILTINS],
       plugins: [
         dts({
           respectExternal: true,
@@ -189,7 +189,7 @@ export async function prebundle(
     return;
   }
 
-  logger.info(`prebundle: ${task.depName}`);
+  logger.start(`prebundle: ${task.depName}`);
 
   fs.removeSync(task.distPath);
 
