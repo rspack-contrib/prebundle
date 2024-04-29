@@ -16,6 +16,8 @@ export type DependencyConfig = {
   packageJsonField?: string[];
   /** Whether to ignore type definitions */
   ignoreDts?: boolean;
+  /** Target ECMA version */
+  target?: string;
   /* Callback before bundle. */
   beforeBundle?: (task: ParsedTask) => void | Promise<void>;
   /* Callback after bundle. */
@@ -37,6 +39,7 @@ export type ParsedTask = {
   distPath: string;
   importPath: string;
   ignoreDts?: boolean;
+  target: NonNullable<DependencyConfig['target']>;
   minify: NonNullable<DependencyConfig['minify']>;
   depName: NonNullable<DependencyConfig['name']>;
   externals: NonNullable<DependencyConfig['externals']>;

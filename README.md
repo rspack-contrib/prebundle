@@ -169,3 +169,19 @@ export default {
   ],
 };
 ```
+
+### target
+
+Target ECMAScript version, default `es2021`.
+
+```ts
+// prebundle.config.mjs
+export default {
+  dependencies: [
+    {
+      name: 'foo',
+      target: 'es2015',
+    },
+  ],
+};
+```

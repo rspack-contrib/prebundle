@@ -161,11 +161,11 @@ export async function prebundle(
     ...DEFAULT_EXTERNALS,
     ...commonExternals,
     ...task.externals,
-  }
+  };
 
   const { code, assets } = await ncc(task.depEntry, {
     minify: task.minify,
-    target: 'es2019',
+    target: task.target,
     externals: mergedExternals,
     assetBuilds: false,
   });

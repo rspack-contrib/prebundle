@@ -46,6 +46,7 @@ export function parseTasks(dependencies: Array<string | DependencyConfig>) {
     if (typeof dep === 'string') {
       result.push({
         minify: false,
+        target: 'es2019',
         externals: {},
         emitFiles: [],
         packageJsonField: [],
@@ -54,6 +55,7 @@ export function parseTasks(dependencies: Array<string | DependencyConfig>) {
     } else {
       result.push({
         minify: dep.minify ?? false,
+        target: dep.target ?? 'es2019',
         ignoreDts: dep.ignoreDts,
         externals: dep.externals ?? {},
         emitFiles: dep.emitFiles ?? [],
