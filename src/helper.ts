@@ -7,17 +7,21 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 
 export function findDepPath(name: string) {
-  let entry = dirname(require.resolve(join(name), { paths: [cwd] }));
+  try {
+    let entry = dirname(require.resolve(join(name), { paths: [cwd] }));
 
-  while (!dirname(entry).endsWith('node_modules')) {
-    entry = dirname(entry);
+    while (!dirname(entry).endsWith('node_modules')) {
+      entry = dirname(entry);
+    }
+
+    if (name.includes('/')) {
+      return join(dirname(entry), name);
+    }
+
+    return entry;
+  } catch (err) {
+    return null;
   }
-
-  if (name.includes('/')) {
-    return join(dirname(entry), name);
-  }
-
-  return entry;
 }
 
 export const resolveConfig = async () => {
@@ -34,6 +38,11 @@ export function parseTasks(dependencies: Array<string | DependencyConfig>) {
     const importPath = join(cwd, DIST_DIR, depName);
     const distPath = join(cwd, DIST_DIR, depName);
     const depPath = findDepPath(depName);
+
+    if (!depPath) {
+      throw new Error(`Failed to resolve dependency: ${depName}`);
+    }
+
     const depEntry = require.resolve(depName, { paths: [cwd] });
     const info = {
       depName,

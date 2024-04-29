@@ -1,12 +1,13 @@
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import ncc from '@vercel/ncc';
-import { Package as DtsPacker } from 'dts-packer';
 import fastGlob from '../compiled/fast-glob/index.js';
 import fs from '../compiled/fs-extra/index.js';
 import rslog from '../compiled/rslog/index.js';
-import { cwd, DEFAULT_EXTERNALS } from './constant.js';
-import { pick, replaceFileContent } from './helper.js';
+import { DEFAULT_EXTERNALS } from './constant.js';
+import { findDepPath, pick } from './helper.js';
 import type { ParsedTask } from './types.js';
+import { dts } from 'rollup-plugin-dts';
+import { rollup, type InputOptions, type OutputOptions } from 'rollup';
 
 const { logger } = rslog;
 
@@ -25,45 +26,88 @@ function emitIndex(code: string, distPath: string) {
   fs.outputFileSync(distIndex, code);
 }
 
-function fixTypeExternalPath(
-  file: string,
-  task: ParsedTask,
-  externals: Record<string, string>,
-) {
-  const filepath = join(task.distPath, file);
-
-  replaceFileContent(filepath, (content) => {
-    let newContent = content;
-
-    for (const name of Object.keys(externals)) {
-      newContent = newContent.replace(
-        new RegExp(`../../${name}`, 'g'),
-        externals[name],
-      );
-    }
-    return newContent;
-  });
-}
-
-function emitDts(task: ParsedTask, externals: Record<string, string>) {
-  if (task.ignoreDts) {
+async function emitDts(task: ParsedTask, externals: Record<string, string>) {
+  const outputDefaultDts = () => {
     fs.writeFileSync(join(task.distPath, 'index.d.ts'), 'export = any;\n');
+  };
+
+  if (task.ignoreDts) {
+    outputDefaultDts();
+    return;
+  }
+
+  const getTypes = (json: Record<string, string>) =>
+    json.types || json.typing || json.typings || null;
+
+  const getInput = () => {
+    const pkgPath = join(task.depPath, 'package.json');
+    const pkgJson = fs.readJsonSync(pkgPath, 'utf-8');
+    const types = getTypes(pkgJson);
+    if (types) {
+      return join(task.depPath, types);
+    }
+
+    const depTypesPath = findDepPath(`@types/${task.depName}/package.json`);
+    if (!depTypesPath) {
+      return null;
+    }
+
+    const depTypesPkg = fs.readJsonSync(depTypesPath, 'utf-8');
+    const depTypes = getTypes(depTypesPkg);
+    return depTypes ? join(dirname(depTypesPath), depTypes) : null;
+  };
+
+  const input = getInput();
+
+  if (!input) {
+    outputDefaultDts();
     return;
   }
 
   try {
-    const { files } = new DtsPacker({
-      cwd,
-      name: task.depName,
-      typesRoot: task.distPath,
-      externals: Object.keys(externals),
-    });
+    const inputConfig: InputOptions = {
+      input,
+      external: Object.keys(externals),
+      plugins: [
+        dts({
+          respectExternal: true,
+          compilerOptions: {
+            skipLibCheck: true,
+            // https://github.com/Swatinem/rollup-plugin-dts/issues/143,
+            // but it will cause error when bundle ts which import another ts file.
+            preserveSymlinks: false,
+            // https://github.com/Swatinem/rollup-plugin-dts/issues/127
+            composite: false,
+            // https://github.com/Swatinem/rollup-plugin-dts/issues/113
+            declarationMap: false,
+            // Ensure ".d.ts" modules are generated
+            declaration: true,
+            // Skip ".js" generation
+            noEmit: false,
+            emitDeclarationOnly: true,
+            // Skip code generation when error occurs
+            noEmitOnError: true,
+            // Avoid extra work
+            checkJs: false,
+            // Ensure we can parse the latest code
+            // @ts-expect-error
+            target: task.target,
+          },
+        }),
+      ],
+    };
 
-    for (const file of Object.keys(files)) {
-      fixTypeExternalPath(file, task, externals);
-    }
+    const outputConfig: OutputOptions = {
+      dir: task.distPath,
+      format: 'esm',
+      exports: 'named',
+      entryFileNames: 'index.d.ts',
+    };
+
+    const bundle = await rollup(inputConfig);
+    await bundle.write(outputConfig);
   } catch (error) {
-    logger.error(`DtsPacker failed: ${task.depName}`);
+    logger.error(`rollup-plugin-dts failed: ${task.depName}`);
     logger.error(error);
   }
 }
@@ -79,9 +123,6 @@ function emitPackageJson(task: ParsedTask) {
     'version',
     'funding',
     'license',
-    'types',
-    'typing',
-    'typings',
     ...task.packageJsonField,
   ]);
 
@@ -89,11 +130,7 @@ function emitPackageJson(task: ParsedTask) {
     pickedPackageJson.name = task.depName;
   }
 
-  if (task.ignoreDts) {
-    delete pickedPackageJson.typing;
-    delete pickedPackageJson.typings;
-    pickedPackageJson.types = 'index.d.ts';
-  }
+  pickedPackageJson.types = 'index.d.ts';
 
   fs.writeJSONSync(outputPath, pickedPackageJson);
 }
@@ -175,7 +212,7 @@ export async function prebundle(
 
   emitIndex(code, task.distPath);
   emitAssets(assets, task.distPath);
-  emitDts(task, mergedExternals);
+  await emitDts(task, mergedExternals);
   emitLicense(task);
   emitPackageJson(task);
   removeSourceMap(task);
