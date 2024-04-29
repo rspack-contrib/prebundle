@@ -70,6 +70,22 @@ export default {
 };
 ```
 
+### dtsExternals
+
+Externals for dts.
+
+```ts
+// prebundle.config.mjs
+export default {
+  dependencies: [
+    {
+      name: 'foo',
+      dtsExternals: ['webpack'],
+    },
+  ],
+};
+```
+
 ### minify
 
 Whether to minify the code, default `false`.
