@@ -45,7 +45,7 @@ export function parseTasks(dependencies: Array<string | DependencyConfig>) {
 
     if (typeof dep === 'string') {
       result.push({
-        minify: true,
+        minify: false,
         externals: {},
         emitFiles: [],
         packageJsonField: [],
@@ -53,7 +53,7 @@ export function parseTasks(dependencies: Array<string | DependencyConfig>) {
       });
     } else {
       result.push({
-        minify: dep.minify ?? true,
+        minify: dep.minify ?? false,
         ignoreDts: dep.ignoreDts,
         externals: dep.externals ?? {},
         emitFiles: dep.emitFiles ?? [],

@@ -72,7 +72,7 @@ export default {
 
 ### minify
 
-Whether to minify the code, default `true`.
+Whether to minify the code, default `false`.
 
 ```ts
 // prebundle.config.mjs
