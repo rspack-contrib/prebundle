@@ -227,5 +227,5 @@ export async function prebundle(
     await task.afterBundle(task);
   }
 
-  logger.success(`prebundle: ${task.depName}\n\n`);
+  logger.success(`prebundle: ${task.depName}`);
 }
