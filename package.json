@@ -1,30 +1,30 @@
 {
   "name": "prebundle",
   "version": "1.1.0",
-  "main": "./dist/index.js",
-  "type": "module",
-  "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc",
-    "prebundle": "node ./bin.js",
-    "prepublishOnly": "npm run build"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/rspack-contrib/prebundle"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "prebundle": "./bin.js"
   },
   "files": [
     "dist",
     "bin.js",
     "compiled"
   ],
-  "bin": {
-    "prebundle": "./bin.js"
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prebundle": "node ./bin.js",
+    "prepublishOnly": "npm run build"
   },
-  "packageManager": "pnpm@9.0.5",
   "dependencies": {
     "@swc/core": "^1.6.13",
     "@vercel/ncc": "0.38.1",
+    "prettier": "^3.2.5",
     "rollup": "^4.17.1",
     "rollup-plugin-dts": "^6.1.0"
   },
@@ -33,10 +33,10 @@
     "@types/node": "18.x",
     "fast-glob": "^3.3.2",
     "fs-extra": "^11.2.0",
-    "prettier": "^3.2.5",
     "rslog": "^1.2.2",
     "typescript": "^5.4.2"
   },
+  "packageManager": "pnpm@9.0.5",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   }
