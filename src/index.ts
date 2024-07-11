@@ -3,10 +3,10 @@ import { prebundle } from './prebundle.js';
 
 export async function run() {
   const config = await resolveConfig();
-  const parsedTasks = parseTasks(config.dependencies);
+  const parsedTasks = parseTasks(config.dependencies, config.prettier);
 
   for (const task of parsedTasks) {
-    await prebundle(task, config.externals, config.prettier);
+    await prebundle(task, config.externals);
   }
 }
 

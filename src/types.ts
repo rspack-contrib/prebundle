@@ -12,6 +12,8 @@ export type DependencyConfig = {
   externals?: Record<string, string>;
   /** Externals types */
   dtsExternals?: Array<string | RegExp>;
+  /** Whether to prettier the code and strip comments */
+  prettier?: boolean;
   /** Emit extra entry files to map imports. */
   emitFiles?: ImportMap[];
   /** Copy extra fields from original package.json to target package.json. */
@@ -43,6 +45,7 @@ export type ParsedTask = {
   distPath: string;
   importPath: string;
   ignoreDts?: boolean;
+  prettier?: boolean;
   target: NonNullable<DependencyConfig['target']>;
   minify: NonNullable<DependencyConfig['minify']>;
   depName: NonNullable<DependencyConfig['name']>;
