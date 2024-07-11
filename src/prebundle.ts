@@ -26,13 +26,19 @@ function emitAssets(
 async function emitIndex(code: string, distPath: string, prettier?: boolean) {
   const distIndex = join(distPath, 'index.js');
 
+  // use terser to strip comments and use prettier to format the code
   if (prettier) {
     const minimized = await minify(code, {
       compress: false,
       mangle: false,
       ecma: 2019,
     });
-    const formatted = await format(minimized?.code || '', {
+
+    if (!minimized.code) {
+      throw new Error('terser minify failed');
+    }
+
+    const formatted = await format(minimized.code, {
       filepath: distIndex,
     });
     await fs.outputFile(distIndex, formatted);
