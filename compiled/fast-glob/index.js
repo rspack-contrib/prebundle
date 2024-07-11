@@ -302,8 +302,8 @@
             throwErrorOnBrokenSymbolicLink: this.throwErrorOnBrokenSymbolicLink,
           });
         }
-        _getValue(option, value1) {
-          return option !== null && option !== void 0 ? option : value1;
+        _getValue(option, value) {
+          return option !== null && option !== void 0 ? option : value;
         }
       }
       exports["default"] = Settings;
@@ -469,8 +469,8 @@
             true,
           );
         }
-        _getValue(option, value1) {
-          return option !== null && option !== void 0 ? option : value1;
+        _getValue(option, value) {
+          return option !== null && option !== void 0 ? option : value;
         }
       }
       exports["default"] = Settings;
@@ -738,8 +738,8 @@
         return !settings.errorFilter(error);
       }
       exports.isFatalError = isFatalError;
-      function isAppliedFilter(filter, value1) {
-        return filter === null || filter(value1);
+      function isAppliedFilter(filter, value) {
+        return filter === null || filter(value);
       }
       exports.isAppliedFilter = isAppliedFilter;
       function replacePathSegmentSeparator(filepath, separator) {
@@ -875,13 +875,13 @@
               this._options.throwErrorOnBrokenSymbolicLink,
           });
         }
-        _getValue(option, value1) {
-          return option !== null && option !== void 0 ? option : value1;
+        _getValue(option, value) {
+          return option !== null && option !== void 0 ? option : value;
         }
       }
       exports["default"] = Settings;
     },
-    32: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    32: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const stringify = __nccwpck_require__(1738);
       const compile = __nccwpck_require__(2445);
@@ -940,9 +940,9 @@
           ? braces.compile(input, options)
           : braces.expand(input, options);
       };
-      module1.exports = braces;
+      module.exports = braces;
     },
-    2445: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    2445: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const fill = __nccwpck_require__(4059);
       const utils = __nccwpck_require__(3230);
@@ -992,11 +992,11 @@
         };
         return walk(ast);
       };
-      module1.exports = compile;
+      module.exports = compile;
     },
-    443: (module1) => {
+    443: (module) => {
       "use strict";
-      module1.exports = {
+      module.exports = {
         MAX_LENGTH: 1024 * 64,
         CHAR_0: "0",
         CHAR_9: "9",
@@ -1038,13 +1038,13 @@
         CHAR_SEMICOLON: ";",
         CHAR_SINGLE_QUOTE: "'",
         CHAR_SPACE: " ",
-        CHAR_TAB: "	",
+        CHAR_TAB: "\t",
         CHAR_UNDERSCORE: "_",
         CHAR_VERTICAL_LINE: "|",
-        CHAR_ZERO_WIDTH_NOBREAK_SPACE: "\uFEFF",
+        CHAR_ZERO_WIDTH_NOBREAK_SPACE: "\ufeff",
       };
     },
-    1577: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    1577: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const fill = __nccwpck_require__(4059);
       const stringify = __nccwpck_require__(1738);
@@ -1061,8 +1061,8 @@
         }
         for (let item of queue) {
           if (Array.isArray(item)) {
-            for (let value1 of item) {
-              result.push(append(value1, stash, enclose));
+            for (let value of item) {
+              result.push(append(value, stash, enclose));
             }
           } else {
             for (let ele of stash) {
@@ -1147,9 +1147,9 @@
         };
         return utils.flatten(walk(ast));
       };
-      module1.exports = expand;
+      module.exports = expand;
     },
-    7702: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    7702: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const stringify = __nccwpck_require__(1738);
       const {
@@ -1191,7 +1191,7 @@
         let length = input.length;
         let index = 0;
         let depth = 0;
-        let value1;
+        let value;
         let memo = {};
         const advance = () => input[index++];
         const push = (node) => {
@@ -1211,36 +1211,36 @@
         push({ type: "bos" });
         while (index < length) {
           block = stack[stack.length - 1];
-          value1 = advance();
+          value = advance();
           if (
-            value1 === CHAR_ZERO_WIDTH_NOBREAK_SPACE ||
-            value1 === CHAR_NO_BREAK_SPACE
+            value === CHAR_ZERO_WIDTH_NOBREAK_SPACE ||
+            value === CHAR_NO_BREAK_SPACE
           ) {
             continue;
           }
-          if (value1 === CHAR_BACKSLASH) {
+          if (value === CHAR_BACKSLASH) {
             push({
               type: "text",
-              value: (options.keepEscaping ? value1 : "") + advance(),
+              value: (options.keepEscaping ? value : "") + advance(),
             });
             continue;
           }
-          if (value1 === CHAR_RIGHT_SQUARE_BRACKET) {
-            push({ type: "text", value: "\\" + value1 });
+          if (value === CHAR_RIGHT_SQUARE_BRACKET) {
+            push({ type: "text", value: "\\" + value });
             continue;
           }
-          if (value1 === CHAR_LEFT_SQUARE_BRACKET) {
+          if (value === CHAR_LEFT_SQUARE_BRACKET) {
             brackets++;
             let closed = true;
             let next;
             while (index < length && (next = advance())) {
-              value1 += next;
+              value += next;
               if (next === CHAR_LEFT_SQUARE_BRACKET) {
                 brackets++;
                 continue;
               }
               if (next === CHAR_BACKSLASH) {
-                value1 += advance();
+                value += advance();
                 continue;
               }
               if (next === CHAR_RIGHT_SQUARE_BRACKET) {
@@ -1250,50 +1250,50 @@
                 }
               }
             }
-            push({ type: "text", value: value1 });
+            push({ type: "text", value });
             continue;
           }
-          if (value1 === CHAR_LEFT_PARENTHESES) {
+          if (value === CHAR_LEFT_PARENTHESES) {
             block = push({ type: "paren", nodes: [] });
             stack.push(block);
-            push({ type: "text", value: value1 });
+            push({ type: "text", value });
             continue;
           }
-          if (value1 === CHAR_RIGHT_PARENTHESES) {
+          if (value === CHAR_RIGHT_PARENTHESES) {
             if (block.type !== "paren") {
-              push({ type: "text", value: value1 });
+              push({ type: "text", value });
               continue;
             }
             block = stack.pop();
-            push({ type: "text", value: value1 });
+            push({ type: "text", value });
             block = stack[stack.length - 1];
             continue;
           }
           if (
-            value1 === CHAR_DOUBLE_QUOTE ||
-            value1 === CHAR_SINGLE_QUOTE ||
-            value1 === CHAR_BACKTICK
+            value === CHAR_DOUBLE_QUOTE ||
+            value === CHAR_SINGLE_QUOTE ||
+            value === CHAR_BACKTICK
           ) {
-            let open = value1;
+            let open = value;
             let next;
             if (options.keepQuotes !== true) {
-              value1 = "";
+              value = "";
             }
             while (index < length && (next = advance())) {
               if (next === CHAR_BACKSLASH) {
-                value1 += next + advance();
+                value += next + advance();
                 continue;
               }
               if (next === open) {
-                if (options.keepQuotes === true) value1 += next;
+                if (options.keepQuotes === true) value += next;
                 break;
               }
-              value1 += next;
+              value += next;
             }
-            push({ type: "text", value: value1 });
+            push({ type: "text", value });
             continue;
           }
-          if (value1 === CHAR_LEFT_CURLY_BRACE) {
+          if (value === CHAR_LEFT_CURLY_BRACE) {
             depth++;
             let dollar =
               (prev.value && prev.value.slice(-1) === "$") ||
@@ -1310,41 +1310,41 @@
             };
             block = push(brace);
             stack.push(block);
-            push({ type: "open", value: value1 });
+            push({ type: "open", value });
             continue;
           }
-          if (value1 === CHAR_RIGHT_CURLY_BRACE) {
+          if (value === CHAR_RIGHT_CURLY_BRACE) {
             if (block.type !== "brace") {
-              push({ type: "text", value: value1 });
+              push({ type: "text", value });
               continue;
             }
             let type = "close";
             block = stack.pop();
             block.close = true;
-            push({ type, value: value1 });
+            push({ type, value });
             depth--;
             block = stack[stack.length - 1];
             continue;
           }
-          if (value1 === CHAR_COMMA && depth > 0) {
+          if (value === CHAR_COMMA && depth > 0) {
             if (block.ranges > 0) {
               block.ranges = 0;
               let open = block.nodes.shift();
               block.nodes = [open, { type: "text", value: stringify(block) }];
             }
-            push({ type: "comma", value: value1 });
+            push({ type: "comma", value });
             block.commas++;
             continue;
           }
-          if (value1 === CHAR_DOT && depth > 0 && block.commas === 0) {
+          if (value === CHAR_DOT && depth > 0 && block.commas === 0) {
             let siblings = block.nodes;
             if (depth === 0 || siblings.length === 0) {
-              push({ type: "text", value: value1 });
+              push({ type: "text", value });
               continue;
             }
             if (prev.type === "dot") {
               block.range = [];
-              prev.value += value1;
+              prev.value += value;
               prev.type = "range";
               if (block.nodes.length !== 3 && block.nodes.length !== 5) {
                 block.invalid = true;
@@ -1359,15 +1359,15 @@
             if (prev.type === "range") {
               siblings.pop();
               let before = siblings[siblings.length - 1];
-              before.value += prev.value + value1;
+              before.value += prev.value + value;
               prev = before;
               block.ranges--;
               continue;
             }
-            push({ type: "dot", value: value1 });
+            push({ type: "dot", value });
             continue;
           }
-          push({ type: "text", value: value1 });
+          push({ type: "text", value });
         }
         do {
           block = stack.pop();
@@ -1388,12 +1388,12 @@
         push({ type: "eos" });
         return ast;
       };
-      module1.exports = parse;
+      module.exports = parse;
     },
-    1738: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    1738: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const utils = __nccwpck_require__(3230);
-      module1.exports = (ast, options = {}) => {
+      module.exports = (ast, options = {}) => {
         let stringify = (node, parent = {}) => {
           let invalidBlock =
             options.escapeInvalid && utils.isInvalidBrace(parent);
@@ -1499,7 +1499,7 @@
         return result;
       };
     },
-    6581: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    6581: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const taskManager = __nccwpck_require__(1789);
       const async_1 = __nccwpck_require__(5728);
@@ -1598,7 +1598,7 @@
           );
         }
       }
-      module1.exports = FastGlob;
+      module.exports = FastGlob;
     },
     1789: (__unused_webpack_module, exports, __nccwpck_require__) => {
       "use strict";
@@ -1719,14 +1719,9 @@
       }
       exports.groupPatternsByBaseDirectory = groupPatternsByBaseDirectory;
       function convertPatternGroupsToTasks(positive, negative, dynamic) {
-        return Object.keys(positive).map((base) => {
-          return convertPatternGroupToTask(
-            base,
-            positive[base],
-            negative,
-            dynamic,
-          );
-        });
+        return Object.keys(positive).map((base) =>
+          convertPatternGroupToTask(base, positive[base], negative, dynamic),
+        );
       }
       exports.convertPatternGroupsToTasks = convertPatternGroupsToTasks;
       function convertPatternGroupToTask(base, positive, negative, dynamic) {
@@ -2272,8 +2267,8 @@
         static(patterns, options) {
           const filepaths = patterns.map(this._getFullEntryPath, this);
           const stream = new stream_1.PassThrough({ objectMode: true });
-          stream._write = (index, _enc, done) => {
-            return this._getEntry(filepaths[index], patterns[index], options)
+          stream._write = (index, _enc, done) =>
+            this._getEntry(filepaths[index], patterns[index], options)
               .then((entry) => {
                 if (entry !== null && options.entryFilter(entry)) {
                   stream.push(entry);
@@ -2284,7 +2279,6 @@
                 done();
               })
               .catch(done);
-          };
           for (let i = 0; i < filepaths.length; i++) {
             stream.write(i);
           }
@@ -2302,9 +2296,9 @@
         }
         _getStat(filepath) {
           return new Promise((resolve, reject) => {
-            this._stat(filepath, this._fsStatSettings, (error, stats) => {
-              return error === null ? resolve(stats) : reject(error);
-            });
+            this._stat(filepath, this._fsStatSettings, (error, stats) =>
+              error === null ? resolve(stats) : reject(error),
+            );
           });
         }
       }
@@ -2428,8 +2422,8 @@
           }
           this.ignore = [].concat(this.ignore);
         }
-        _getValue(option, value1) {
-          return option === undefined ? value1 : option;
+        _getValue(option, value) {
+          return option === undefined ? value : option;
         }
         _getFileSystemMethods(methods = {}) {
           return Object.assign(
@@ -2732,9 +2726,11 @@
       }
       exports.isAffectDepthOfReadingPattern = isAffectDepthOfReadingPattern;
       function expandPatternsWithBraceExpansion(patterns) {
-        return patterns.reduce((collection, pattern) => {
-          return collection.concat(expandBraceExpansion(pattern));
-        }, []);
+        return patterns.reduce(
+          (collection, pattern) =>
+            collection.concat(expandBraceExpansion(pattern)),
+          [],
+        );
       }
       exports.expandPatternsWithBraceExpansion =
         expandPatternsWithBraceExpansion;
@@ -2812,7 +2808,7 @@
       }
       exports.isEmpty = isEmpty;
     },
-    3550: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    3550: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       var reusify = __nccwpck_require__(7728);
       function fastqueue(context, worker, _concurrency) {
@@ -2832,10 +2828,10 @@
         var _running = 0;
         var errorHandler = null;
         var self = {
-          push: push,
+          push,
           drain: noop,
           saturated: noop,
-          pause: pause,
+          pause,
           paused: false,
           get concurrency() {
             return _concurrency;
@@ -2853,16 +2849,16 @@
               release();
             }
           },
-          running: running,
-          resume: resume,
-          idle: idle,
-          length: length,
-          getQueue: getQueue,
-          unshift: unshift,
+          running,
+          resume,
+          idle,
+          length,
+          getQueue,
+          unshift,
           empty: noop,
-          kill: kill,
-          killAndDrain: killAndDrain,
-          error: error,
+          kill,
+          killAndDrain,
+          error,
         };
         return self;
         function running() {
@@ -2905,11 +2901,11 @@
         function idle() {
           return _running === 0 && self.length() === 0;
         }
-        function push(value1, done) {
+        function push(value, done) {
           var current = cache.get();
           current.context = context;
           current.release = release;
-          current.value = value1;
+          current.value = value;
           current.callback = done || noop;
           current.errorHandler = errorHandler;
           if (_running >= _concurrency || self.paused) {
@@ -2926,11 +2922,11 @@
             worker.call(context, current.value, current.worked);
           }
         }
-        function unshift(value1, done) {
+        function unshift(value, done) {
           var current = cache.get();
           current.context = context;
           current.release = release;
-          current.value = value1;
+          current.value = value;
           current.callback = done || noop;
           current.errorHandler = errorHandler;
           if (_running >= _concurrency || self.paused) {
@@ -3025,9 +3021,9 @@
         queue.unshift = unshift;
         queue.drained = drained;
         return queue;
-        function push(value1) {
+        function push(value) {
           var p = new Promise(function (resolve, reject) {
-            pushCb(value1, function (err, result) {
+            pushCb(value, function (err, result) {
               if (err) {
                 reject(err);
                 return;
@@ -3038,9 +3034,9 @@
           p.catch(noop);
           return p;
         }
-        function unshift(value1) {
+        function unshift(value) {
           var p = new Promise(function (resolve, reject) {
-            unshiftCb(value1, function (err, result) {
+            unshiftCb(value, function (err, result) {
               if (err) {
                 reject(err);
                 return;
@@ -3067,10 +3063,10 @@
           return p;
         }
       }
-      module1.exports = fastqueue;
-      module1.exports.promise = queueAsPromised;
+      module.exports = fastqueue;
+      module.exports.promise = queueAsPromised;
     },
-    4059: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    4059: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       /*!
        * fill-range <https://github.com/jonschlinkert/fill-range>
@@ -3081,23 +3077,18 @@
       const toRegexRange = __nccwpck_require__(7513);
       const isObject = (val) =>
         val !== null && typeof val === "object" && !Array.isArray(val);
-      const transform = (toNumber) => {
-        return (value1) =>
-          toNumber === true ? Number(value1) : String(value1);
-      };
-      const isValidValue = (value1) => {
-        return (
-          typeof value1 === "number" ||
-          (typeof value1 === "string" && value1 !== "")
-        );
-      };
+      const transform = (toNumber) => (value) =>
+        toNumber === true ? Number(value) : String(value);
+      const isValidValue = (value) =>
+        typeof value === "number" ||
+        (typeof value === "string" && value !== "");
       const isNumber = (num) => Number.isInteger(+num);
       const zeros = (input) => {
-        let value1 = `${input}`;
+        let value = `${input}`;
         let index = -1;
-        if (value1[0] === "-") value1 = value1.slice(1);
-        if (value1 === "0") return false;
-        while (value1[++index] === "0");
+        if (value[0] === "-") value = value.slice(1);
+        if (value === "0") return false;
+        while (value[++index] === "0");
         return index > 0;
       };
       const stringify = (start, end, options) => {
@@ -3166,11 +3157,8 @@
         }
         return toRegexRange(start, end, options);
       };
-      const rangeError = (...args) => {
-        return new RangeError(
-          "Invalid range arguments: " + util.inspect(...args),
-        );
-      };
+      const rangeError = (...args) =>
+        new RangeError("Invalid range arguments: " + util.inspect(...args));
       const invalidRange = (start, end, options) => {
         if (options.strictRanges === true) throw rangeError([start, end]);
         return [];
@@ -3285,9 +3273,9 @@
         }
         return fillLetters(start, end, Math.max(Math.abs(step), 1), opts);
       };
-      module1.exports = fill;
+      module.exports = fill;
     },
-    862: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    862: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       var isGlob = __nccwpck_require__(7429);
       var pathPosixDirname = __nccwpck_require__(1017).posix.dirname;
@@ -3297,7 +3285,7 @@
       var enclosure = /[\{\[].*[\}\]]$/;
       var globby = /(^|[^\\])([\{\[]|\([^\)]+$)/;
       var escaped = /\\([\!\*\?\|\[\]\(\)\{\}])/g;
-      module1.exports = function globParent(str, opts) {
+      module.exports = function globParent(str, opts) {
         var options = Object.assign({ flipBackslashes: true }, opts);
         if (options.flipBackslashes && isWin32 && str.indexOf(slash) < 0) {
           str = str.replace(backslash, slash);
@@ -3312,13 +3300,14 @@
         return str.replace(escaped, "$1");
       };
     },
-    5327: (module1) => {
+    5327: (module) => {
       /*!
        * is-extglob <https://github.com/jonschlinkert/is-extglob>
        *
        * Copyright (c) 2014-2016, Jon Schlinkert.
        * Licensed under the MIT License.
-       */ module1.exports = function isExtglob(str) {
+       */
+      module.exports = function isExtglob(str) {
         if (typeof str !== "string" || str === "") {
           return false;
         }
@@ -3330,13 +3319,14 @@
         return false;
       };
     },
-    7429: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    7429: (module, __unused_webpack_exports, __nccwpck_require__) => {
       /*!
        * is-glob <https://github.com/jonschlinkert/is-glob>
        *
        * Copyright (c) 2014-2017, Jon Schlinkert.
        * Released under the MIT License.
-       */ var isExtglob = __nccwpck_require__(5327);
+       */
+      var isExtglob = __nccwpck_require__(5327);
       var chars = { "{": "}", "(": ")", "[": "]" };
       var strictCheck = function (str) {
         if (str[0] === "!") {
@@ -3466,7 +3456,7 @@
         }
         return false;
       };
-      module1.exports = function isGlob(str, options) {
+      module.exports = function isGlob(str, options) {
         if (typeof str !== "string" || str === "") {
           return false;
         }
@@ -3480,14 +3470,14 @@
         return check(str);
       };
     },
-    7378: (module1) => {
+    7378: (module) => {
       "use strict";
       /*!
        * is-number <https://github.com/jonschlinkert/is-number>
        *
        * Copyright (c) 2014-present, Jon Schlinkert.
        * Released under the MIT License.
-       */ module1.exports = function (num) {
+       */ module.exports = function (num) {
         if (typeof num === "number") {
           return num - num === 0;
         }
@@ -3497,12 +3487,12 @@
         return false;
       };
     },
-    7033: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    7033: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const Stream = __nccwpck_require__(2781);
       const PassThrough = Stream.PassThrough;
       const slice = Array.prototype.slice;
-      module1.exports = merge2;
+      module.exports = merge2;
       function merge2() {
         const streamsQueue = [];
         const args = slice.call(arguments);
@@ -3612,7 +3602,7 @@
         return streams;
       }
     },
-    3886: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    3886: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const util = __nccwpck_require__(3837);
       const braces = __nccwpck_require__(32);
@@ -3779,13 +3769,13 @@
           throw new TypeError("Expected a string");
         return micromatch.braces(pattern, { ...options, expand: true });
       };
-      module1.exports = micromatch;
+      module.exports = micromatch;
     },
-    4317: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    4317: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
-      module1.exports = __nccwpck_require__(4181);
+      module.exports = __nccwpck_require__(4181);
     },
-    7682: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    7682: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const path = __nccwpck_require__(1017);
       const WIN_SLASH = "\\\\/";
@@ -3852,7 +3842,7 @@
         word: "A-Za-z0-9_",
         xdigit: "A-Fa-f0-9",
       };
-      module1.exports = {
+      module.exports = {
         MAX_LENGTH: 1024 * 64,
         POSIX_REGEX_SOURCE,
         REGEX_BACKSLASH: /\\(?![*+?^${}(|)[\]])/g,
@@ -3924,7 +3914,7 @@
         },
       };
     },
-    5018: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    5018: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const constants = __nccwpck_require__(7682);
       const utils = __nccwpck_require__(6807);
@@ -3940,17 +3930,16 @@
           return options.expandRange(...args, options);
         }
         args.sort();
-        const value1 = `[${args.join("-")}]`;
+        const value = `[${args.join("-")}]`;
         try {
-          new RegExp(value1);
+          new RegExp(value);
         } catch (ex) {
           return args.map((v) => utils.escapeRegex(v)).join("..");
         }
-        return value1;
+        return value;
       };
-      const syntaxError = (type, char) => {
-        return `Missing ${type}: "${char}" - use "\\\\${char}" to match literal characters`;
-      };
+      const syntaxError = (type, char) =>
+        `Missing ${type}: "${char}" - use "\\\\${char}" to match literal characters`;
       const parse = (input, options) => {
         if (typeof input !== "string") {
           throw new TypeError("Expected a string");
@@ -3987,9 +3976,8 @@
           STAR,
           START_ANCHOR,
         } = PLATFORM_CHARS;
-        const globstar = (opts) => {
-          return `(${capture}(?:(?!${START_ANCHOR}${opts.dot ? DOTS_SLASH : DOT_LITERAL}).)*?)`;
-        };
+        const globstar = (opts) =>
+          `(${capture}(?:(?!${START_ANCHOR}${opts.dot ? DOTS_SLASH : DOT_LITERAL}).)*?)`;
         const nodot = opts.dot ? "" : NO_DOT;
         const qmarkNoDot = opts.dot ? QMARK : QMARK_NO_DOT;
         let star = opts.bash === true ? globstar(opts) : STAR;
@@ -4022,13 +4010,13 @@
         const braces = [];
         const stack = [];
         let prev = bos;
-        let value1;
+        let value;
         const eos = () => state.index === len - 1;
         const peek = (state.peek = (n = 1) => input[state.index + n]);
         const advance = (state.advance = () => input[++state.index] || "");
         const remaining = () => input.slice(state.index + 1);
-        const consume = (value1 = "", num = 0) => {
-          state.consumed += value1;
+        const consume = (value = "", num = 0) => {
+          state.consumed += value;
           state.index += num;
         };
         const append = (token) => {
@@ -4092,14 +4080,14 @@
           tokens.push(tok);
           prev = tok;
         };
-        const extglobOpen = (type, value1) => {
-          const token = { ...EXTGLOB_CHARS[value1], conditions: 1, inner: "" };
+        const extglobOpen = (type, value) => {
+          const token = { ...EXTGLOB_CHARS[value], conditions: 1, inner: "" };
           token.prev = prev;
           token.parens = state.parens;
           token.output = state.output;
           const output = (opts.capture ? "(" : "") + token.open;
           increment("parens");
-          push({ type, value: value1, output: state.output ? "" : ONE_CHAR });
+          push({ type, value, output: state.output ? "" : ONE_CHAR });
           push({ type: "paren", extglob: true, value: advance(), output });
           extglobs.push(token);
         };
@@ -4133,7 +4121,7 @@
               state.negatedExtglob = true;
             }
           }
-          push({ type: "paren", extglob: true, value: value1, output });
+          push({ type: "paren", extglob: true, value, output });
           decrement("parens");
         };
         if (opts.fastpaths !== false && !/(^[*!]|[/()[\]{}"])/.test(input)) {
@@ -4170,9 +4158,9 @@
             if (opts.unescape === true) {
               output = output.replace(/\\/g, "");
             } else {
-              output = output.replace(/\\+/g, (m) => {
-                return m.length % 2 === 0 ? "\\\\" : m ? "\\" : "";
-              });
+              output = output.replace(/\\+/g, (m) =>
+                m.length % 2 === 0 ? "\\\\" : m ? "\\" : "",
+              );
             }
           }
           if (output === input && opts.contains === true) {
@@ -4183,11 +4171,11 @@
           return state;
         }
         while (!eos()) {
-          value1 = advance();
-          if (value1 === "\0") {
+          value = advance();
+          if (value === "\0") {
             continue;
           }
-          if (value1 === "\\") {
+          if (value === "\\") {
             const next = peek();
             if (next === "/" && opts.bash !== true) {
               continue;
@@ -4196,8 +4184,8 @@
               continue;
             }
             if (!next) {
-              value1 += "\\";
-              push({ type: "text", value: value1 });
+              value += "\\";
+              push({ type: "text", value });
               continue;
             }
             const match = /^\\+/.exec(remaining());
@@ -4206,24 +4194,24 @@
               slashes = match[0].length;
               state.index += slashes;
               if (slashes % 2 !== 0) {
-                value1 += "\\";
+                value += "\\";
               }
             }
             if (opts.unescape === true) {
-              value1 = advance();
+              value = advance();
             } else {
-              value1 += advance();
+              value += advance();
             }
             if (state.brackets === 0) {
-              push({ type: "text", value: value1 });
+              push({ type: "text", value });
               continue;
             }
           }
           if (
             state.brackets > 0 &&
-            (value1 !== "]" || prev.value === "[" || prev.value === "[^")
+            (value !== "]" || prev.value === "[" || prev.value === "[^")
           ) {
-            if (opts.posix !== false && value1 === ":") {
+            if (opts.posix !== false && value === ":") {
               const inner = prev.value.slice(1);
               if (inner.includes("[")) {
                 prev.posix = true;
@@ -4245,40 +4233,40 @@
               }
             }
             if (
-              (value1 === "[" && peek() !== ":") ||
-              (value1 === "-" && peek() === "]")
+              (value === "[" && peek() !== ":") ||
+              (value === "-" && peek() === "]")
             ) {
-              value1 = `\\${value1}`;
+              value = `\\${value}`;
             }
-            if (value1 === "]" && (prev.value === "[" || prev.value === "[^")) {
-              value1 = `\\${value1}`;
+            if (value === "]" && (prev.value === "[" || prev.value === "[^")) {
+              value = `\\${value}`;
             }
-            if (opts.posix === true && value1 === "!" && prev.value === "[") {
-              value1 = "^";
+            if (opts.posix === true && value === "!" && prev.value === "[") {
+              value = "^";
             }
-            prev.value += value1;
-            append({ value: value1 });
+            prev.value += value;
+            append({ value });
             continue;
           }
-          if (state.quotes === 1 && value1 !== '"') {
-            value1 = utils.escapeRegex(value1);
-            prev.value += value1;
-            append({ value: value1 });
+          if (state.quotes === 1 && value !== '"') {
+            value = utils.escapeRegex(value);
+            prev.value += value;
+            append({ value });
             continue;
           }
-          if (value1 === '"') {
+          if (value === '"') {
             state.quotes = state.quotes === 1 ? 0 : 1;
             if (opts.keepQuotes === true) {
-              push({ type: "text", value: value1 });
+              push({ type: "text", value });
             }
             continue;
           }
-          if (value1 === "(") {
+          if (value === "(") {
             increment("parens");
-            push({ type: "paren", value: value1 });
+            push({ type: "paren", value });
             continue;
           }
-          if (value1 === ")") {
+          if (value === ")") {
             if (state.parens === 0 && opts.strictBrackets === true) {
               throw new SyntaxError(syntaxError("opening", "("));
             }
@@ -4287,39 +4275,35 @@
               extglobClose(extglobs.pop());
               continue;
             }
-            push({
-              type: "paren",
-              value: value1,
-              output: state.parens ? ")" : "\\)",
-            });
+            push({ type: "paren", value, output: state.parens ? ")" : "\\)" });
             decrement("parens");
             continue;
           }
-          if (value1 === "[") {
+          if (value === "[") {
             if (opts.nobracket === true || !remaining().includes("]")) {
               if (opts.nobracket !== true && opts.strictBrackets === true) {
                 throw new SyntaxError(syntaxError("closing", "]"));
               }
-              value1 = `\\${value1}`;
+              value = `\\${value}`;
             } else {
               increment("brackets");
             }
-            push({ type: "bracket", value: value1 });
+            push({ type: "bracket", value });
             continue;
           }
-          if (value1 === "]") {
+          if (value === "]") {
             if (
               opts.nobracket === true ||
               (prev && prev.type === "bracket" && prev.value.length === 1)
             ) {
-              push({ type: "text", value: value1, output: `\\${value1}` });
+              push({ type: "text", value, output: `\\${value}` });
               continue;
             }
             if (state.brackets === 0) {
               if (opts.strictBrackets === true) {
                 throw new SyntaxError(syntaxError("opening", "["));
               }
-              push({ type: "text", value: value1, output: `\\${value1}` });
+              push({ type: "text", value, output: `\\${value}` });
               continue;
             }
             decrement("brackets");
@@ -4329,10 +4313,10 @@
               prevValue[0] === "^" &&
               !prevValue.includes("/")
             ) {
-              value1 = `/${value1}`;
+              value = `/${value}`;
             }
-            prev.value += value1;
-            append({ value: value1 });
+            prev.value += value;
+            append({ value });
             if (
               opts.literalBrackets === false ||
               utils.hasRegexChars(prevValue)
@@ -4350,11 +4334,11 @@
             state.output += prev.value;
             continue;
           }
-          if (value1 === "{" && opts.nobrace !== true) {
+          if (value === "{" && opts.nobrace !== true) {
             increment("braces");
             const open = {
               type: "brace",
-              value: value1,
+              value,
               output: "(",
               outputIndex: state.output.length,
               tokensIndex: state.tokens.length,
@@ -4363,10 +4347,10 @@
             push(open);
             continue;
           }
-          if (value1 === "}") {
+          if (value === "}") {
             const brace = braces[braces.length - 1];
             if (opts.nobrace === true || !brace) {
-              push({ type: "text", value: value1, output: value1 });
+              push({ type: "text", value, output: value });
               continue;
             }
             let output = ")";
@@ -4389,35 +4373,35 @@
               const out = state.output.slice(0, brace.outputIndex);
               const toks = state.tokens.slice(brace.tokensIndex);
               brace.value = brace.output = "\\{";
-              value1 = output = "\\}";
+              value = output = "\\}";
               state.output = out;
               for (const t of toks) {
                 state.output += t.output || t.value;
               }
             }
-            push({ type: "brace", value: value1, output });
+            push({ type: "brace", value, output });
             decrement("braces");
             braces.pop();
             continue;
           }
-          if (value1 === "|") {
+          if (value === "|") {
             if (extglobs.length > 0) {
               extglobs[extglobs.length - 1].conditions++;
             }
-            push({ type: "text", value: value1 });
+            push({ type: "text", value });
             continue;
           }
-          if (value1 === ",") {
-            let output = value1;
+          if (value === ",") {
+            let output = value;
             const brace = braces[braces.length - 1];
             if (brace && stack[stack.length - 1] === "braces") {
               brace.comma = true;
               output = "|";
             }
-            push({ type: "comma", value: value1, output });
+            push({ type: "comma", value, output });
             continue;
           }
-          if (value1 === "/") {
+          if (value === "/") {
             if (prev.type === "dot" && state.index === state.start + 1) {
               state.start = state.index + 1;
               state.consumed = "";
@@ -4426,16 +4410,16 @@
               prev = bos;
               continue;
             }
-            push({ type: "slash", value: value1, output: SLASH_LITERAL });
+            push({ type: "slash", value, output: SLASH_LITERAL });
             continue;
           }
-          if (value1 === ".") {
+          if (value === ".") {
             if (state.braces > 0 && prev.type === "dot") {
               if (prev.value === ".") prev.output = DOT_LITERAL;
               const brace = braces[braces.length - 1];
               prev.type = "dots";
-              prev.output += value1;
-              prev.value += value1;
+              prev.output += value;
+              prev.value += value;
               brace.dots = true;
               continue;
             }
@@ -4444,13 +4428,13 @@
               prev.type !== "bos" &&
               prev.type !== "slash"
             ) {
-              push({ type: "text", value: value1, output: DOT_LITERAL });
+              push({ type: "text", value, output: DOT_LITERAL });
               continue;
             }
-            push({ type: "dot", value: value1, output: DOT_LITERAL });
+            push({ type: "dot", value, output: DOT_LITERAL });
             continue;
           }
-          if (value1 === "?") {
+          if (value === "?") {
             const isGroup = prev && prev.value === "(";
             if (
               !isGroup &&
@@ -4458,12 +4442,12 @@
               peek() === "(" &&
               peek(2) !== "?"
             ) {
-              extglobOpen("qmark", value1);
+              extglobOpen("qmark", value);
               continue;
             }
             if (prev && prev.type === "paren") {
               const next = peek();
-              let output = value1;
+              let output = value;
               if (next === "<" && !utils.supportsLookbehinds()) {
                 throw new Error(
                   "Node.js v10 or higher is required for regex lookbehinds",
@@ -4473,25 +4457,25 @@
                 (prev.value === "(" && !/[!=<:]/.test(next)) ||
                 (next === "<" && !/<([!=]|\w+>)/.test(remaining()))
               ) {
-                output = `\\${value1}`;
+                output = `\\${value}`;
               }
-              push({ type: "text", value: value1, output });
+              push({ type: "text", value, output });
               continue;
             }
             if (
               opts.dot !== true &&
               (prev.type === "slash" || prev.type === "bos")
             ) {
-              push({ type: "qmark", value: value1, output: QMARK_NO_DOT });
+              push({ type: "qmark", value, output: QMARK_NO_DOT });
               continue;
             }
-            push({ type: "qmark", value: value1, output: QMARK });
+            push({ type: "qmark", value, output: QMARK });
             continue;
           }
-          if (value1 === "!") {
+          if (value === "!") {
             if (opts.noextglob !== true && peek() === "(") {
               if (peek(2) !== "?" || !/[!=<:]/.test(peek(3))) {
-                extglobOpen("negate", value1);
+                extglobOpen("negate", value);
                 continue;
               }
             }
@@ -4500,13 +4484,13 @@
               continue;
             }
           }
-          if (value1 === "+") {
+          if (value === "+") {
             if (opts.noextglob !== true && peek() === "(" && peek(2) !== "?") {
-              extglobOpen("plus", value1);
+              extglobOpen("plus", value);
               continue;
             }
             if ((prev && prev.value === "(") || opts.regex === false) {
-              push({ type: "plus", value: value1, output: PLUS_LITERAL });
+              push({ type: "plus", value, output: PLUS_LITERAL });
               continue;
             }
             if (
@@ -4516,50 +4500,50 @@
                   prev.type === "brace")) ||
               state.parens > 0
             ) {
-              push({ type: "plus", value: value1 });
+              push({ type: "plus", value });
               continue;
             }
             push({ type: "plus", value: PLUS_LITERAL });
             continue;
           }
-          if (value1 === "@") {
+          if (value === "@") {
             if (opts.noextglob !== true && peek() === "(" && peek(2) !== "?") {
-              push({ type: "at", extglob: true, value: value1, output: "" });
+              push({ type: "at", extglob: true, value, output: "" });
               continue;
             }
-            push({ type: "text", value: value1 });
+            push({ type: "text", value });
             continue;
           }
-          if (value1 !== "*") {
-            if (value1 === "$" || value1 === "^") {
-              value1 = `\\${value1}`;
+          if (value !== "*") {
+            if (value === "$" || value === "^") {
+              value = `\\${value}`;
             }
             const match = REGEX_NON_SPECIAL_CHARS.exec(remaining());
             if (match) {
-              value1 += match[0];
+              value += match[0];
               state.index += match[0].length;
             }
-            push({ type: "text", value: value1 });
+            push({ type: "text", value });
             continue;
           }
           if (prev && (prev.type === "globstar" || prev.star === true)) {
             prev.type = "star";
             prev.star = true;
-            prev.value += value1;
+            prev.value += value;
             prev.output = star;
             state.backtrack = true;
             state.globstar = true;
-            consume(value1);
+            consume(value);
             continue;
           }
           let rest = remaining();
           if (opts.noextglob !== true && /^\([^?]/.test(rest)) {
-            extglobOpen("star", value1);
+            extglobOpen("star", value);
             continue;
           }
           if (prev.type === "star") {
             if (opts.noglobstar === true) {
-              consume(value1);
+              consume(value);
               continue;
             }
             const prior = prev.prev;
@@ -4571,7 +4555,7 @@
               opts.bash === true &&
               (!isStart || (rest[0] && rest[0] !== "/"))
             ) {
-              push({ type: "star", value: value1, output: "" });
+              push({ type: "star", value, output: "" });
               continue;
             }
             const isBrace =
@@ -4581,7 +4565,7 @@
               extglobs.length &&
               (prior.type === "pipe" || prior.type === "paren");
             if (!isStart && prior.type !== "paren" && !isBrace && !isExtglob) {
-              push({ type: "star", value: value1, output: "" });
+              push({ type: "star", value, output: "" });
               continue;
             }
             while (rest.slice(0, 3) === "/**") {
@@ -4594,11 +4578,11 @@
             }
             if (prior.type === "bos" && eos()) {
               prev.type = "globstar";
-              prev.value += value1;
+              prev.value += value;
               prev.output = globstar(opts);
               state.output = prev.output;
               state.globstar = true;
-              consume(value1);
+              consume(value);
               continue;
             }
             if (
@@ -4614,10 +4598,10 @@
               prior.output = `(?:${prior.output}`;
               prev.type = "globstar";
               prev.output = globstar(opts) + (opts.strictSlashes ? ")" : "|$)");
-              prev.value += value1;
+              prev.value += value;
               state.globstar = true;
               state.output += prior.output + prev.output;
-              consume(value1);
+              consume(value);
               continue;
             }
             if (
@@ -4633,33 +4617,33 @@
               prior.output = `(?:${prior.output}`;
               prev.type = "globstar";
               prev.output = `${globstar(opts)}${SLASH_LITERAL}|${SLASH_LITERAL}${end})`;
-              prev.value += value1;
+              prev.value += value;
               state.output += prior.output + prev.output;
               state.globstar = true;
-              consume(value1 + advance());
+              consume(value + advance());
               push({ type: "slash", value: "/", output: "" });
               continue;
             }
             if (prior.type === "bos" && rest[0] === "/") {
               prev.type = "globstar";
-              prev.value += value1;
+              prev.value += value;
               prev.output = `(?:^|${SLASH_LITERAL}|${globstar(opts)}${SLASH_LITERAL})`;
               state.output = prev.output;
               state.globstar = true;
-              consume(value1 + advance());
+              consume(value + advance());
               push({ type: "slash", value: "/", output: "" });
               continue;
             }
             state.output = state.output.slice(0, -prev.output.length);
             prev.type = "globstar";
             prev.output = globstar(opts);
-            prev.value += value1;
+            prev.value += value;
             state.output += prev.output;
             state.globstar = true;
-            consume(value1);
+            consume(value);
             continue;
           }
-          const token = { type: "star", value: value1, output: star };
+          const token = { type: "star", value, output: star };
           if (opts.bash === true) {
             token.output = ".*?";
             if (prev.type === "bos" || prev.type === "slash") {
@@ -4673,7 +4657,7 @@
             (prev.type === "bracket" || prev.type === "paren") &&
             opts.regex === true
           ) {
-            token.output = value1;
+            token.output = value;
             push(token);
             continue;
           }
@@ -4805,9 +4789,9 @@
         }
         return source;
       };
-      module1.exports = parse;
+      module.exports = parse;
     },
-    4181: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    4181: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const path = __nccwpck_require__(1017);
       const scan = __nccwpck_require__(369);
@@ -4987,9 +4971,9 @@
         }
       };
       picomatch.constants = constants;
-      module1.exports = picomatch;
+      module.exports = picomatch;
     },
-    369: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    369: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const utils = __nccwpck_require__(6807);
       const {
@@ -5009,9 +4993,8 @@
         CHAR_RIGHT_PARENTHESES,
         CHAR_RIGHT_SQUARE_BRACKET,
       } = __nccwpck_require__(7682);
-      const isPathSeparator = (code) => {
-        return code === CHAR_FORWARD_SLASH || code === CHAR_BACKWARD_SLASH;
-      };
+      const isPathSeparator = (code) =>
+        code === CHAR_FORWARD_SLASH || code === CHAR_BACKWARD_SLASH;
       const depth = (token) => {
         if (token.isPrefix !== true) {
           token.depth = token.isGlobstar ? Infinity : 1;
@@ -5281,27 +5264,27 @@
           for (let idx = 0; idx < slashes.length; idx++) {
             const n = prevIndex ? prevIndex + 1 : start;
             const i = slashes[idx];
-            const value1 = input.slice(n, i);
+            const value = input.slice(n, i);
             if (opts.tokens) {
               if (idx === 0 && start !== 0) {
                 tokens[idx].isPrefix = true;
                 tokens[idx].value = prefix;
               } else {
-                tokens[idx].value = value1;
+                tokens[idx].value = value;
               }
               depth(tokens[idx]);
               state.maxDepth += tokens[idx].depth;
             }
-            if (idx !== 0 || value1 !== "") {
-              parts.push(value1);
+            if (idx !== 0 || value !== "") {
+              parts.push(value);
             }
             prevIndex = i;
           }
           if (prevIndex && prevIndex + 1 < input.length) {
-            const value1 = input.slice(prevIndex + 1);
-            parts.push(value1);
+            const value = input.slice(prevIndex + 1);
+            parts.push(value);
             if (opts.tokens) {
-              tokens[tokens.length - 1].value = value1;
+              tokens[tokens.length - 1].value = value;
               depth(tokens[tokens.length - 1]);
               state.maxDepth += tokens[tokens.length - 1].depth;
             }
@@ -5311,7 +5294,7 @@
         }
         return state;
       };
-      module1.exports = scan;
+      module.exports = scan;
     },
     6807: (__unused_webpack_module, exports, __nccwpck_require__) => {
       "use strict";
@@ -5331,11 +5314,10 @@
       exports.escapeRegex = (str) =>
         str.replace(REGEX_SPECIAL_CHARS_GLOBAL, "\\$1");
       exports.toPosixSlashes = (str) => str.replace(REGEX_BACKSLASH, "/");
-      exports.removeBackslashes = (str) => {
-        return str.replace(REGEX_REMOVE_BACKSLASH, (match) => {
-          return match === "\\" ? "" : match;
-        });
-      };
+      exports.removeBackslashes = (str) =>
+        str.replace(REGEX_REMOVE_BACKSLASH, (match) =>
+          match === "\\" ? "" : match,
+        );
       exports.supportsLookbehinds = () => {
         const segs = process.version.slice(1).split(".").map(Number);
         if (
@@ -5377,9 +5359,10 @@
         return output;
       };
     },
-    1504: (module1) => {
-      /*! queue-microtask. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */ let promise;
-      module1.exports =
+    1504: (module) => {
+      /*! queue-microtask. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+      let promise;
+      module.exports =
         typeof queueMicrotask === "function"
           ? queueMicrotask.bind(typeof window !== "undefined" ? window : global)
           : (cb) =>
@@ -5389,7 +5372,7 @@
                 }, 0),
               );
     },
-    7728: (module1) => {
+    7728: (module) => {
       "use strict";
       function reusify(Constructor) {
         var head = new Constructor();
@@ -5409,14 +5392,14 @@
           tail.next = obj;
           tail = obj;
         }
-        return { get: get, release: release };
+        return { get, release };
       }
-      module1.exports = reusify;
+      module.exports = reusify;
     },
-    7492: (module1, __unused_webpack_exports, __nccwpck_require__) => {
-      /*! run-parallel. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */ module1.exports =
-        runParallel;
-      const queueMicrotask1 = __nccwpck_require__(1504);
+    7492: (module, __unused_webpack_exports, __nccwpck_require__) => {
+      /*! run-parallel. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+      module.exports = runParallel;
+      const queueMicrotask = __nccwpck_require__(1504);
       function runParallel(tasks, cb) {
         let results, pending, keys;
         let isSync = true;
@@ -5433,7 +5416,7 @@
             if (cb) cb(err, results);
             cb = null;
           }
-          if (isSync) queueMicrotask1(end);
+          if (isSync) queueMicrotask(end);
           else end();
         }
         function each(i, err, result) {
@@ -5460,7 +5443,7 @@
         isSync = false;
       }
     },
-    7513: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    7513: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       /*!
        * to-regex-range <https://github.com/micromatch/to-regex-range>
@@ -5658,11 +5641,11 @@
       function hasPadding(str) {
         return /^-?(0+)\d/.test(str);
       }
-      function padZeros(value1, tok, options) {
+      function padZeros(value, tok, options) {
         if (!tok.isPadded) {
-          return value1;
+          return value;
         }
-        let diff = Math.abs(tok.maxLen - String(value1).length);
+        let diff = Math.abs(tok.maxLen - String(value).length);
         let relax = options.relaxZeros !== false;
         switch (diff) {
           case 0:
@@ -5678,31 +5661,31 @@
       }
       toRegexRange.cache = {};
       toRegexRange.clearCache = () => (toRegexRange.cache = {});
-      module1.exports = toRegexRange;
+      module.exports = toRegexRange;
     },
-    2361: (module1) => {
+    2361: (module) => {
       "use strict";
-      module1.exports = require("events");
+      module.exports = require("events");
     },
-    7147: (module1) => {
+    7147: (module) => {
       "use strict";
-      module1.exports = require("fs");
+      module.exports = require("fs");
     },
-    2037: (module1) => {
+    2037: (module) => {
       "use strict";
-      module1.exports = require("os");
+      module.exports = require("os");
     },
-    1017: (module1) => {
+    1017: (module) => {
       "use strict";
-      module1.exports = require("path");
+      module.exports = require("path");
     },
-    2781: (module1) => {
+    2781: (module) => {
       "use strict";
-      module1.exports = require("stream");
+      module.exports = require("stream");
     },
-    3837: (module1) => {
+    3837: (module) => {
       "use strict";
-      module1.exports = require("util");
+      module.exports = require("util");
     },
   };
   var __webpack_module_cache__ = {};
@@ -5711,19 +5694,19 @@
     if (cachedModule !== undefined) {
       return cachedModule.exports;
     }
-    var module1 = (__webpack_module_cache__[moduleId] = { exports: {} });
+    var module = (__webpack_module_cache__[moduleId] = { exports: {} });
     var threw = true;
     try {
       __webpack_modules__[moduleId](
-        module1,
-        module1.exports,
+        module,
+        module.exports,
         __nccwpck_require__,
       );
       threw = false;
     } finally {
       if (threw) delete __webpack_module_cache__[moduleId];
     }
-    return module1.exports;
+    return module.exports;
   }
   if (typeof __nccwpck_require__ !== "undefined")
     __nccwpck_require__.ab = __dirname + "/";

@@ -8,7 +8,7 @@ import { findDepPath, pick } from './helper.js';
 import type { ParsedTask } from './types.js';
 import { dts } from 'rollup-plugin-dts';
 import { rollup, type InputOptions, type OutputOptions } from 'rollup';
-import swc from '@swc/core';
+import { minify } from 'terser';
 import { format } from 'prettier';
 
 const { logger } = rslog;
@@ -27,12 +27,12 @@ async function emitIndex(code: string, distPath: string, prettier?: boolean) {
   const distIndex = join(distPath, 'index.js');
 
   if (prettier) {
-    const minimized = await swc.minify(code, {
+    const minimized = await minify(code, {
       compress: false,
       mangle: false,
       ecma: 2019,
     });
-    const formatted = await format(minimized.code, {
+    const formatted = await format(minimized?.code || '', {
       filepath: distIndex,
     });
     await fs.outputFile(distIndex, formatted);
