@@ -22,11 +22,11 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@swc/core": "^1.6.13",
     "@vercel/ncc": "0.38.1",
     "prettier": "^3.2.5",
     "rollup": "^4.17.1",
-    "rollup-plugin-dts": "^6.1.0"
+    "rollup-plugin-dts": "^6.1.0",
+    "terser": "^5.31.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

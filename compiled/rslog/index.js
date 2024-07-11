@@ -1,16 +1,16 @@
 (() => {
   "use strict";
   var __webpack_modules__ = {
-    37: (module1) => {
-      module1.exports = require("os");
+    37: (module) => {
+      module.exports = require("os");
     },
-    282: (module1) => {
-      module1.exports = require("process");
+    282: (module) => {
+      module.exports = require("process");
     },
-    224: (module1) => {
-      module1.exports = require("tty");
+    224: (module) => {
+      module.exports = require("tty");
     },
-    103: (module1, __unused_webpack_exports, __nccwpck_require__) => {
+    103: (module, __unused_webpack_exports, __nccwpck_require__) => {
       var __create = Object.create;
       var __defProp = Object.defineProperty;
       var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -49,7 +49,7 @@
         createLogger: () => createLogger,
         logger: () => logger,
       });
-      module1.exports = __toCommonJS(src_exports);
+      module.exports = __toCommonJS(src_exports);
       var import_node_process = __toESM(__nccwpck_require__(282));
       var import_node_os = __toESM(__nccwpck_require__(37));
       var import_node_tty = __toESM(__nccwpck_require__(224));
@@ -254,13 +254,13 @@
           ? start + replaceClose(end, close, replace, nextIndex)
           : start + end;
       };
-      var bold = formatter("\x1b[1m", "\x1b[22m", "\x1b[22m\x1b[1m");
-      var red = formatter("\x1b[31m", "\x1b[39m");
-      var green = formatter("\x1b[32m", "\x1b[39m");
-      var yellow = formatter("\x1b[33m", "\x1b[39m");
-      var magenta = formatter("\x1b[35m", "\x1b[39m");
-      var cyan = formatter("\x1b[36m", "\x1b[39m");
-      var gray = formatter("\x1b[90m", "\x1b[39m");
+      var bold = formatter("[1m", "[22m", "[22m[1m");
+      var red = formatter("[31m", "[39m");
+      var green = formatter("[32m", "[39m");
+      var yellow = formatter("[33m", "[39m");
+      var magenta = formatter("[35m", "[39m");
+      var cyan = formatter("[36m", "[39m");
+      var gray = formatter("[90m", "[39m");
       var startColor = [189, 255, 243];
       var endColor = [74, 194, 154];
       var isWord = (char) => !/[\s\n]/.test(char);
@@ -283,7 +283,7 @@
             g += gStep;
             b += bStep;
           }
-          output += `\x1b[38;2;${Math.round(r)};${Math.round(g)};${Math.round(b)}m${char}\x1b[39m`;
+          output += `[38;2;${Math.round(r)};${Math.round(g)};${Math.round(b)}m${char}[39m`;
         }
         return bold(output);
       };
@@ -320,8 +320,7 @@
               if (name.startsWith("Error: ")) {
                 name = name.slice(7);
               }
-              text = `${name}
-${gray(rest.join("\n"))}`;
+              text = `${name}\n${gray(rest.join("\n"))}`;
             } else {
               text = message.message;
             }
@@ -360,19 +359,19 @@ ${gray(rest.join("\n"))}`;
     if (cachedModule !== undefined) {
       return cachedModule.exports;
     }
-    var module1 = (__webpack_module_cache__[moduleId] = { exports: {} });
+    var module = (__webpack_module_cache__[moduleId] = { exports: {} });
     var threw = true;
     try {
       __webpack_modules__[moduleId](
-        module1,
-        module1.exports,
+        module,
+        module.exports,
         __nccwpck_require__,
       );
       threw = false;
     } finally {
       if (threw) delete __webpack_module_cache__[moduleId];
     }
-    return module1.exports;
+    return module.exports;
   }
   if (typeof __nccwpck_require__ !== "undefined")
     __nccwpck_require__.ab = __dirname + "/";
