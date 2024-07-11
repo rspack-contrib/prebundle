@@ -23,6 +23,7 @@
   },
   "packageManager": "pnpm@9.0.5",
   "dependencies": {
+    "@swc/core": "^1.6.13",
     "@vercel/ncc": "0.38.1",
     "rollup": "^4.17.1",
     "rollup-plugin-dts": "^6.1.0"

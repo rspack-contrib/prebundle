@@ -33,6 +33,8 @@ export type Config = {
    */
   externals?: Record<string, string>;
   dependencies: Array<string | DependencyConfig>;
+  /** Whether to prettier the code and strip comments */
+  prettier?: boolean;
 };
 
 export type ParsedTask = {

@@ -8,6 +8,8 @@ import { findDepPath, pick } from './helper.js';
 import type { ParsedTask } from './types.js';
 import { dts } from 'rollup-plugin-dts';
 import { rollup, type InputOptions, type OutputOptions } from 'rollup';
+import swc from '@swc/core';
+import { format } from 'prettier';
 
 const { logger } = rslog;
 
@@ -21,14 +23,27 @@ function emitAssets(
   }
 }
 
-function emitIndex(code: string, distPath: string) {
+async function emitIndex(code: string, distPath: string, prettier?: boolean) {
   const distIndex = join(distPath, 'index.js');
-  fs.outputFileSync(distIndex, code);
+
+  if (prettier) {
+    const minimized = await swc.minify(code, {
+      compress: false,
+      mangle: false,
+      ecma: 2019,
+    });
+    const formatted = await format(minimized.code, {
+      filepath: distIndex,
+    });
+    await fs.outputFile(distIndex, formatted);
+  } else {
+    await fs.outputFile(distIndex, code);
+  }
 }
 
 async function emitDts(task: ParsedTask, externals: Record<string, string>) {
   const outputDefaultDts = () => {
-    fs.writeFileSync(join(task.distPath, 'index.d.ts'), 'export = any;\n');
+    fs.outputFileSync(join(task.distPath, 'index.d.ts'), 'export = any;\n');
   };
 
   if (task.ignoreDts) {
@@ -188,6 +203,7 @@ const pkgName = process.argv[2];
 export async function prebundle(
   task: ParsedTask,
   commonExternals: Record<string, string> = {},
+  prettier?: boolean,
 ) {
   if (pkgName && task.depName !== pkgName) {
     return;
@@ -214,7 +230,7 @@ export async function prebundle(
     assetBuilds: false,
   });
 
-  emitIndex(code, task.distPath);
+  await emitIndex(code, task.distPath, prettier);
   emitAssets(assets, task.distPath);
   await emitDts(task, mergedExternals);
   emitLicense(task);

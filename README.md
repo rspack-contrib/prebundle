@@ -201,3 +201,14 @@ export default {
   ],
 };
 ```
+
+### prettier
+
+Whether to prettier the code and strip comments, default `false`.
+
+```ts
+// prebundle.config.mjs
+export default {
+  prettier: true,
+};
+```
