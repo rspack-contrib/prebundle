@@ -31,7 +31,10 @@ export const resolveConfig = async () => {
   return config.default as Config;
 };
 
-export function parseTasks(dependencies: Array<string | DependencyConfig>) {
+export function parseTasks(
+  dependencies: Array<string | DependencyConfig>,
+  globalPrettier?: boolean,
+) {
   const result: ParsedTask[] = [];
 
   for (const dep of dependencies) {
@@ -61,6 +64,7 @@ export function parseTasks(dependencies: Array<string | DependencyConfig>) {
         dtsExternals: [],
         emitFiles: [],
         packageJsonField: [],
+        prettier: globalPrettier,
         ...info,
       });
     } else {
@@ -71,6 +75,7 @@ export function parseTasks(dependencies: Array<string | DependencyConfig>) {
         externals: dep.externals ?? {},
         dtsExternals: dep.dtsExternals ?? [],
         emitFiles: dep.emitFiles ?? [],
+        prettier: dep.prettier ?? globalPrettier,
         afterBundle: dep.afterBundle,
         beforeBundle: dep.beforeBundle,
         packageJsonField: dep.packageJsonField ?? [],

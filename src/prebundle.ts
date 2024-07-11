@@ -203,7 +203,6 @@ const pkgName = process.argv[2];
 export async function prebundle(
   task: ParsedTask,
   commonExternals: Record<string, string> = {},
-  prettier?: boolean,
 ) {
   if (pkgName && task.depName !== pkgName) {
     return;
@@ -230,7 +229,7 @@ export async function prebundle(
     assetBuilds: false,
   });
 
-  await emitIndex(code, task.distPath, prettier);
+  await emitIndex(code, task.distPath, task.prettier);
   emitAssets(assets, task.distPath);
   await emitDts(task, mergedExternals);
   emitLicense(task);
