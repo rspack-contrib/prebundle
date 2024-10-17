@@ -16,8 +16,8 @@
     "compiled"
   ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "rslib build",
+    "dev": "rslib build --watch",
     "prebundle": "node ./bin.js",
     "prepublishOnly": "npm run build"
   },
@@ -29,6 +29,7 @@
     "terser": "^5.31.2"
   },
   "devDependencies": {
+    "@rslib/core": "0.0.11",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "18.x",
     "fast-glob": "^3.3.2",
