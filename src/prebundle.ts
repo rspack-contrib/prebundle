@@ -137,7 +137,10 @@ async function emitDts(task: ParsedTask, externals: Record<string, string>) {
   }
 }
 
-function emitPackageJson(task: ParsedTask) {
+function emitPackageJson(
+  task: ParsedTask,
+  assets: Record<string, { source: string }>,
+) {
   const packageJsonPath = join(task.depPath, 'package.json');
   const packageJson = fs.readJsonSync(packageJsonPath, 'utf-8');
   const outputPath = join(task.distPath, 'package.json');
@@ -156,6 +159,18 @@ function emitPackageJson(task: ParsedTask) {
   }
 
   pickedPackageJson.types = 'index.d.ts';
+
+  pickedPackageJson.type = 'commonjs';
+
+  if (assets['package.json']) {
+    try {
+      Object.assign(
+        pickedPackageJson,
+        // will be `{"type":"module"}` if the output is of esm format
+        pick(JSON.parse(assets['package.json'].source), ['type']),
+      );
+    } catch {}
+  }
 
   fs.writeJSONSync(outputPath, pickedPackageJson);
 }
@@ -198,9 +213,6 @@ function renameDistFolder(task: ParsedTask) {
     }
   }
 
-  // compiled packages are always use commonjs
-  pkgJson.type = 'commonjs';
-
   fs.writeJSONSync(pkgPath, pkgJson);
 }
 
@@ -239,7 +251,7 @@ export async function prebundle(
   emitAssets(assets, task.distPath);
   await emitDts(task, mergedExternals);
   emitLicense(task);
-  emitPackageJson(task);
+  emitPackageJson(task, assets);
   removeSourceMap(task);
   renameDistFolder(task);
   emitExtraFiles(task);
