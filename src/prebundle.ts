@@ -4,7 +4,12 @@ import fastGlob from '../compiled/fast-glob/index.js';
 import fs from '../compiled/fs-extra/index.js';
 import rslog from '../compiled/rslog/index.js';
 import { DEFAULT_EXTERNALS, NODE_BUILTINS } from './constant.js';
-import { findDepPath, pick } from './helper.js';
+import {
+  findDepPath,
+  findDirectTypeFile,
+  pick,
+  pkgNameToAtTypes,
+} from './helper.js';
 import type { ParsedTask } from './types.js';
 import { dts } from 'rollup-plugin-dts';
 import { rollup, type InputOptions, type OutputOptions } from 'rollup';
@@ -57,8 +62,14 @@ async function emitDts(task: ParsedTask, externals: Record<string, string>) {
     return;
   }
 
-  const getTypes = (json: Record<string, string>) =>
-    json.types || json.typing || json.typings || null;
+  const getTypes = (json: Record<string, string>): string | null =>
+    (json &&
+      (json.types ||
+        json.typing ||
+        json.typings ||
+        // for those who use `exports` only
+        getTypes((json as any).exports?.['.']))) ||
+    null;
 
   const getInput = () => {
     const pkgPath = join(task.depPath, 'package.json');
@@ -68,7 +79,14 @@ async function emitDts(task: ParsedTask, externals: Record<string, string>) {
       return join(task.depPath, types);
     }
 
-    const depTypesPath = findDepPath(`@types/${task.depName}/package.json`);
+    const directTypeFile = findDirectTypeFile(task.depEntry);
+    if (directTypeFile) {
+      return directTypeFile;
+    }
+
+    const depTypesPath = findDepPath(
+      `${pkgNameToAtTypes(task.depName)}/package.json`,
+    );
     if (!depTypesPath) {
       return null;
     }
