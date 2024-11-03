@@ -1,4 +1,4 @@
-import { dirname, join } from 'node:path';
+import { dirname, extname, join } from 'node:path';
 import fs from '../compiled/fs-extra/index.js';
 import { cwd, DIST_DIR } from './constant.js';
 import type { Config, DependencyConfig, ParsedTask } from './types.js';
@@ -108,5 +108,45 @@ export function replaceFileContent(
 
   if (newContent !== content) {
     fs.writeFileSync(filePath, newContent);
+  }
+}
+
+export function pkgNameToAtTypes(name: string) {
+  const mangled = name.replace(
+    //  111111    222222
+    /^@([^\/]+)\/([^\/]+)/,
+    '$1__$2',
+  );
+  return `@types/${mangled}`;
+}
+
+/**
+ * Find the direct type file for a given file path.
+ * @param filepath
+ */
+export function findDirectTypeFile(filepath: string) {
+  if (/\.d\.[cm]?ts/.test(filepath)) {
+    return filepath;
+  }
+  const ext = extname(filepath);
+  const base = filepath.slice(0, -ext.length);
+  const _find = (list: string[]) => {
+    for (const f of list) {
+      try {
+        return require.resolve(f, { paths: [cwd] });
+      } catch {}
+    }
+  };
+  switch (ext) {
+    case '.js':
+    case '.ts':
+      return _find([base + '.d.ts']);
+    case '.mjs':
+    case '.mts':
+      return _find([base + '.d.mts', base + '.d.ts']);
+    case '.cjs':
+    case '.cts':
+      return _find([base + '.d.cts', base + '.d.ts']);
+    default:
   }
 }
