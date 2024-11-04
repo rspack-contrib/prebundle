@@ -19,7 +19,7 @@
     "build": "rslib build",
     "dev": "rslib build --watch",
     "prebundle": "node ./bin.js",
-    "prepublishOnly": "npm run build",
+    "prepare": "npm run build",
     "bump": "npx bumpp"
   },
   "dependencies": {
