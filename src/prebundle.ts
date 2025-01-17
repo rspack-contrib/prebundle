@@ -15,6 +15,7 @@ import { dts } from 'rollup-plugin-dts';
 import { rollup, type InputOptions, type OutputOptions } from 'rollup';
 import { minify } from 'terser';
 import { format } from 'prettier';
+import { existsSync } from 'node:fs';
 
 const { logger } = rslog;
 
@@ -258,11 +259,16 @@ export async function prebundle(
     ...task.externals,
   };
 
+  const nodeModulesPath = join(process.cwd(), 'node_modules');
+  const hasNodeModules = existsSync(nodeModulesPath);
+  const enableCache = !process.env.CI && hasNodeModules;
+
   const { code, assets } = await ncc(task.depEntry, {
     minify: task.minify,
     target: task.target,
     externals: mergedExternals,
     assetBuilds: false,
+    cache: enableCache ? join(nodeModulesPath, '.cache', 'ncc-cache') : false,
   });
 
   await emitIndex(code, task.distPath, task.prettier);

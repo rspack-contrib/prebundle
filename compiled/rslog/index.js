@@ -1,16 +1,16 @@
 (() => {
   "use strict";
   var __webpack_modules__ = {
-    37: (module) => {
+    857: (module) => {
       module.exports = require("os");
     },
-    282: (module) => {
+    932: (module) => {
       module.exports = require("process");
     },
-    224: (module) => {
+    18: (module) => {
       module.exports = require("tty");
     },
-    103: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    436: (module, __unused_webpack_exports, __nccwpck_require__) => {
       var __create = Object.create;
       var __defProp = Object.defineProperty;
       var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -50,9 +50,9 @@
         logger: () => logger,
       });
       module.exports = __toCommonJS(src_exports);
-      var import_node_process = __toESM(__nccwpck_require__(282));
-      var import_node_os = __toESM(__nccwpck_require__(37));
-      var import_node_tty = __toESM(__nccwpck_require__(224));
+      var import_node_process = __toESM(__nccwpck_require__(932));
+      var import_node_os = __toESM(__nccwpck_require__(857));
+      var import_node_tty = __toESM(__nccwpck_require__(18));
       function hasFlag(
         flag,
         argv = globalThis.Deno
@@ -232,7 +232,7 @@
         ? supports_color_default.stdout.level
         : 0;
       var errorStackRegExp = /at\s.*:\d+:\d+[\s\)]*$/;
-      var anonymousErrorStackRegExp = /^\s*at\s.*\(<anonymous>\)$/;
+      var anonymousErrorStackRegExp = /at\s.*\(<anonymous>\)$/;
       var isErrorStackMessage = (message) =>
         errorStackRegExp.test(message) ||
         anonymousErrorStackRegExp.test(message);
@@ -375,6 +375,6 @@
   }
   if (typeof __nccwpck_require__ !== "undefined")
     __nccwpck_require__.ab = __dirname + "/";
-  var __webpack_exports__ = __nccwpck_require__(103);
+  var __webpack_exports__ = __nccwpck_require__(436);
   module.exports = __webpack_exports__;
 })();
