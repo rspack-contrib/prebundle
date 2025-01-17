@@ -1,12 +1,12 @@
 (() => {
   var __webpack_modules__ = {
-    533: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    568: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const fs = __nccwpck_require__(551);
       const path = __nccwpck_require__(928);
-      const mkdirsSync = __nccwpck_require__(923).mkdirsSync;
-      const utimesMillisSync = __nccwpck_require__(592).utimesMillisSync;
-      const stat = __nccwpck_require__(81);
+      const mkdirsSync = __nccwpck_require__(90).mkdirsSync;
+      const utimesMillisSync = __nccwpck_require__(847).utimesMillisSync;
+      const stat = __nccwpck_require__(106);
       function copySync(src, dest, opts) {
         if (typeof opts === "function") {
           opts = { filter: opts };
@@ -101,9 +101,15 @@
         return setDestMode(dest, srcMode);
       }
       function copyDir(src, dest, opts) {
-        fs.readdirSync(src).forEach((item) =>
-          copyDirItem(item, src, dest, opts),
-        );
+        const dir = fs.opendirSync(src);
+        try {
+          let dirent;
+          while ((dirent = dir.readSync()) !== null) {
+            copyDirItem(dirent.name, src, dest, opts);
+          }
+        } finally {
+          dir.closeSync();
+        }
       }
       function copyDirItem(item, src, dest, opts) {
         const srcItem = path.join(src, item);
@@ -155,14 +161,14 @@
       }
       module.exports = copySync;
     },
-    597: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    918: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
-      const fs = __nccwpck_require__(312);
+      const fs = __nccwpck_require__(389);
       const path = __nccwpck_require__(928);
-      const { mkdirs } = __nccwpck_require__(923);
-      const { pathExists } = __nccwpck_require__(467);
-      const { utimesMillis } = __nccwpck_require__(592);
-      const stat = __nccwpck_require__(81);
+      const { mkdirs } = __nccwpck_require__(90);
+      const { pathExists } = __nccwpck_require__(812);
+      const { utimesMillis } = __nccwpck_require__(847);
+      const stat = __nccwpck_require__(106);
       async function copy(src, dest, opts = {}) {
         if (typeof opts === "function") {
           opts = { filter: opts };
@@ -246,22 +252,23 @@
         if (!destStat) {
           await fs.mkdir(dest);
         }
-        const items = await fs.readdir(src);
-        await Promise.all(
-          items.map(async (item) => {
-            const srcItem = path.join(src, item);
-            const destItem = path.join(dest, item);
-            const include = await runFilter(srcItem, destItem, opts);
-            if (!include) return;
-            const { destStat } = await stat.checkPaths(
-              srcItem,
-              destItem,
-              "copy",
-              opts,
-            );
-            return getStatsAndPerformCopy(destStat, srcItem, destItem, opts);
-          }),
-        );
+        const promises = [];
+        for await (const item of await fs.opendir(src)) {
+          const srcItem = path.join(src, item.name);
+          const destItem = path.join(dest, item.name);
+          promises.push(
+            runFilter(srcItem, destItem, opts).then((include) => {
+              if (include) {
+                return stat
+                  .checkPaths(srcItem, destItem, "copy", opts)
+                  .then(({ destStat }) =>
+                    getStatsAndPerformCopy(destStat, srcItem, destItem, opts),
+                  );
+              }
+            }),
+          );
+        }
+        await Promise.all(promises);
         if (!destStat) {
           await fs.chmod(dest, srcStat.mode);
         }
@@ -300,21 +307,21 @@
       }
       module.exports = copy;
     },
-    394: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    51: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromPromise;
       module.exports = {
-        copy: u(__nccwpck_require__(597)),
-        copySync: __nccwpck_require__(533),
+        copy: u(__nccwpck_require__(918)),
+        copySync: __nccwpck_require__(568),
       };
     },
-    60: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    43: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromPromise;
-      const fs = __nccwpck_require__(312);
+      const fs = __nccwpck_require__(389);
       const path = __nccwpck_require__(928);
-      const mkdir = __nccwpck_require__(923);
-      const remove = __nccwpck_require__(887);
+      const mkdir = __nccwpck_require__(90);
+      const remove = __nccwpck_require__(730);
       const emptyDir = u(async function emptyDir(dir) {
         let items;
         try {
@@ -345,12 +352,12 @@
         emptydir: emptyDir,
       };
     },
-    111: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    868: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromPromise;
       const path = __nccwpck_require__(928);
-      const fs = __nccwpck_require__(312);
-      const mkdir = __nccwpck_require__(923);
+      const fs = __nccwpck_require__(389);
+      const mkdir = __nccwpck_require__(90);
       async function createFile(file) {
         let stats;
         try {
@@ -395,11 +402,11 @@
       }
       module.exports = { createFile: u(createFile), createFileSync };
     },
-    845: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    524: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
-      const { createFile, createFileSync } = __nccwpck_require__(111);
-      const { createLink, createLinkSync } = __nccwpck_require__(825);
-      const { createSymlink, createSymlinkSync } = __nccwpck_require__(554);
+      const { createFile, createFileSync } = __nccwpck_require__(868);
+      const { createLink, createLinkSync } = __nccwpck_require__(366);
+      const { createSymlink, createSymlinkSync } = __nccwpck_require__(735);
       module.exports = {
         createFile,
         createFileSync,
@@ -415,14 +422,14 @@
         ensureSymlinkSync: createSymlinkSync,
       };
     },
-    825: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    366: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromPromise;
       const path = __nccwpck_require__(928);
-      const fs = __nccwpck_require__(312);
-      const mkdir = __nccwpck_require__(923);
-      const { pathExists } = __nccwpck_require__(467);
-      const { areIdentical } = __nccwpck_require__(81);
+      const fs = __nccwpck_require__(389);
+      const mkdir = __nccwpck_require__(90);
+      const { pathExists } = __nccwpck_require__(812);
+      const { areIdentical } = __nccwpck_require__(106);
       async function createLink(srcpath, dstpath) {
         let dstStat;
         try {
@@ -463,11 +470,11 @@
       }
       module.exports = { createLink: u(createLink), createLinkSync };
     },
-    599: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    850: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const path = __nccwpck_require__(928);
-      const fs = __nccwpck_require__(312);
-      const { pathExists } = __nccwpck_require__(467);
+      const fs = __nccwpck_require__(389);
+      const { pathExists } = __nccwpck_require__(812);
       const u = __nccwpck_require__(327).fromPromise;
       async function symlinkPaths(srcpath, dstpath) {
         if (path.isAbsolute(srcpath)) {
@@ -511,9 +518,9 @@
       }
       module.exports = { symlinkPaths: u(symlinkPaths), symlinkPathsSync };
     },
-    563: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    84: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
-      const fs = __nccwpck_require__(312);
+      const fs = __nccwpck_require__(389);
       const u = __nccwpck_require__(327).fromPromise;
       async function symlinkType(srcpath, type) {
         if (type) return type;
@@ -537,16 +544,16 @@
       }
       module.exports = { symlinkType: u(symlinkType), symlinkTypeSync };
     },
-    554: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    735: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromPromise;
       const path = __nccwpck_require__(928);
-      const fs = __nccwpck_require__(312);
-      const { mkdirs, mkdirsSync } = __nccwpck_require__(923);
-      const { symlinkPaths, symlinkPathsSync } = __nccwpck_require__(599);
-      const { symlinkType, symlinkTypeSync } = __nccwpck_require__(563);
-      const { pathExists } = __nccwpck_require__(467);
-      const { areIdentical } = __nccwpck_require__(81);
+      const fs = __nccwpck_require__(389);
+      const { mkdirs, mkdirsSync } = __nccwpck_require__(90);
+      const { symlinkPaths, symlinkPathsSync } = __nccwpck_require__(850);
+      const { symlinkType, symlinkTypeSync } = __nccwpck_require__(84);
+      const { pathExists } = __nccwpck_require__(812);
+      const { areIdentical } = __nccwpck_require__(106);
       async function createSymlink(srcpath, dstpath, type) {
         let stats;
         try {
@@ -589,7 +596,7 @@
       }
       module.exports = { createSymlink: u(createSymlink), createSymlinkSync };
     },
-    312: (__unused_webpack_module, exports, __nccwpck_require__) => {
+    389: (__unused_webpack_module, exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromCallback;
       const fs = __nccwpck_require__(551);
@@ -600,6 +607,7 @@
         "chown",
         "close",
         "copyFile",
+        "cp",
         "fchmod",
         "fchown",
         "fdatasync",
@@ -607,8 +615,10 @@
         "fsync",
         "ftruncate",
         "futimes",
+        "glob",
         "lchmod",
         "lchown",
+        "lutimes",
         "link",
         "lstat",
         "mkdir",
@@ -623,6 +633,7 @@
         "rm",
         "rmdir",
         "stat",
+        "statfs",
         "symlink",
         "truncate",
         "unlink",
@@ -700,27 +711,27 @@
         );
       }
     },
-    278: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    977: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       module.exports = {
-        ...__nccwpck_require__(312),
-        ...__nccwpck_require__(394),
-        ...__nccwpck_require__(60),
-        ...__nccwpck_require__(845),
-        ...__nccwpck_require__(333),
-        ...__nccwpck_require__(923),
-        ...__nccwpck_require__(66),
-        ...__nccwpck_require__(175),
-        ...__nccwpck_require__(467),
-        ...__nccwpck_require__(887),
+        ...__nccwpck_require__(389),
+        ...__nccwpck_require__(51),
+        ...__nccwpck_require__(43),
+        ...__nccwpck_require__(524),
+        ...__nccwpck_require__(916),
+        ...__nccwpck_require__(90),
+        ...__nccwpck_require__(251),
+        ...__nccwpck_require__(692),
+        ...__nccwpck_require__(812),
+        ...__nccwpck_require__(730),
       };
     },
-    333: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    916: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromPromise;
-      const jsonFile = __nccwpck_require__(393);
-      jsonFile.outputJson = u(__nccwpck_require__(919));
-      jsonFile.outputJsonSync = __nccwpck_require__(951);
+      const jsonFile = __nccwpck_require__(330);
+      jsonFile.outputJson = u(__nccwpck_require__(238));
+      jsonFile.outputJsonSync = __nccwpck_require__(72);
       jsonFile.outputJSON = jsonFile.outputJson;
       jsonFile.outputJSONSync = jsonFile.outputJsonSync;
       jsonFile.writeJSON = jsonFile.writeJson;
@@ -729,7 +740,7 @@
       jsonFile.readJSONSync = jsonFile.readJsonSync;
       module.exports = jsonFile;
     },
-    393: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    330: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const jsonFile = __nccwpck_require__(535);
       module.exports = {
@@ -739,30 +750,30 @@
         writeJsonSync: jsonFile.writeFileSync,
       };
     },
-    951: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    72: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const { stringify } = __nccwpck_require__(306);
-      const { outputFileSync } = __nccwpck_require__(175);
+      const { outputFileSync } = __nccwpck_require__(692);
       function outputJsonSync(file, data, options) {
         const str = stringify(data, options);
         outputFileSync(file, str, options);
       }
       module.exports = outputJsonSync;
     },
-    919: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    238: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const { stringify } = __nccwpck_require__(306);
-      const { outputFile } = __nccwpck_require__(175);
+      const { outputFile } = __nccwpck_require__(692);
       async function outputJson(file, data, options = {}) {
         const str = stringify(data, options);
         await outputFile(file, str, options);
       }
       module.exports = outputJson;
     },
-    923: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    90: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromPromise;
-      const { makeDir: _makeDir, makeDirSync } = __nccwpck_require__(43);
+      const { makeDir: _makeDir, makeDirSync } = __nccwpck_require__(904);
       const makeDir = u(_makeDir);
       module.exports = {
         mkdirs: makeDir,
@@ -773,10 +784,10 @@
         ensureDirSync: makeDirSync,
       };
     },
-    43: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    904: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
-      const fs = __nccwpck_require__(312);
-      const { checkPath } = __nccwpck_require__(806);
+      const fs = __nccwpck_require__(389);
+      const { checkPath } = __nccwpck_require__(963);
       const getMode = (options) => {
         const defaults = { mode: 511 };
         if (typeof options === "number") return options;
@@ -791,7 +802,7 @@
         return fs.mkdirSync(dir, { mode: getMode(options), recursive: true });
       };
     },
-    806: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    963: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const path = __nccwpck_require__(928);
       module.exports.checkPath = function checkPath(pth) {
@@ -807,22 +818,22 @@
         }
       };
     },
-    66: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    251: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromPromise;
       module.exports = {
-        move: u(__nccwpck_require__(949)),
-        moveSync: __nccwpck_require__(245),
+        move: u(__nccwpck_require__(758)),
+        moveSync: __nccwpck_require__(640),
       };
     },
-    245: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    640: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const fs = __nccwpck_require__(551);
       const path = __nccwpck_require__(928);
-      const copySync = __nccwpck_require__(394).copySync;
-      const removeSync = __nccwpck_require__(887).removeSync;
-      const mkdirpSync = __nccwpck_require__(923).mkdirpSync;
-      const stat = __nccwpck_require__(81);
+      const copySync = __nccwpck_require__(51).copySync;
+      const removeSync = __nccwpck_require__(730).removeSync;
+      const mkdirpSync = __nccwpck_require__(90).mkdirpSync;
+      const stat = __nccwpck_require__(106);
       function moveSync(src, dest, opts) {
         opts = opts || {};
         const overwrite = opts.overwrite || opts.clobber || false;
@@ -869,15 +880,15 @@
       }
       module.exports = moveSync;
     },
-    949: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    758: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
-      const fs = __nccwpck_require__(312);
+      const fs = __nccwpck_require__(389);
       const path = __nccwpck_require__(928);
-      const { copy } = __nccwpck_require__(394);
-      const { remove } = __nccwpck_require__(887);
-      const { mkdirp } = __nccwpck_require__(923);
-      const { pathExists } = __nccwpck_require__(467);
-      const stat = __nccwpck_require__(81);
+      const { copy } = __nccwpck_require__(51);
+      const { remove } = __nccwpck_require__(730);
+      const { mkdirp } = __nccwpck_require__(90);
+      const { pathExists } = __nccwpck_require__(812);
+      const stat = __nccwpck_require__(106);
       async function move(src, dest, opts = {}) {
         const overwrite = opts.overwrite || opts.clobber || false;
         const { srcStat, isChangingCase = false } = await stat.checkPaths(
@@ -922,13 +933,13 @@
       }
       module.exports = move;
     },
-    175: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    692: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromPromise;
-      const fs = __nccwpck_require__(312);
+      const fs = __nccwpck_require__(389);
       const path = __nccwpck_require__(928);
-      const mkdir = __nccwpck_require__(923);
-      const pathExists = __nccwpck_require__(467).pathExists;
+      const mkdir = __nccwpck_require__(90);
+      const pathExists = __nccwpck_require__(812).pathExists;
       async function outputFile(file, data, encoding = "utf-8") {
         const dir = path.dirname(file);
         if (!(await pathExists(dir))) {
@@ -945,10 +956,10 @@
       }
       module.exports = { outputFile: u(outputFile), outputFileSync };
     },
-    467: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    812: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const u = __nccwpck_require__(327).fromPromise;
-      const fs = __nccwpck_require__(312);
+      const fs = __nccwpck_require__(389);
       function pathExists(path) {
         return fs
           .access(path)
@@ -960,7 +971,7 @@
         pathExistsSync: fs.existsSync,
       };
     },
-    887: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    730: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
       const fs = __nccwpck_require__(551);
       const u = __nccwpck_require__(327).fromCallback;
@@ -972,9 +983,9 @@
       }
       module.exports = { remove: u(remove), removeSync };
     },
-    81: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    106: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
-      const fs = __nccwpck_require__(312);
+      const fs = __nccwpck_require__(389);
       const path = __nccwpck_require__(928);
       const u = __nccwpck_require__(327).fromPromise;
       function getStats(src, dest, opts) {
@@ -1136,9 +1147,9 @@
         areIdentical,
       };
     },
-    592: (module, __unused_webpack_exports, __nccwpck_require__) => {
+    847: (module, __unused_webpack_exports, __nccwpck_require__) => {
       "use strict";
-      const fs = __nccwpck_require__(312);
+      const fs = __nccwpck_require__(389);
       const u = __nccwpck_require__(327).fromPromise;
       async function utimesMillis(path, atime, mtime) {
         const fd = await fs.open(path, "r+");
@@ -2143,6 +2154,6 @@
   }
   if (typeof __nccwpck_require__ !== "undefined")
     __nccwpck_require__.ab = __dirname + "/";
-  var __webpack_exports__ = __nccwpck_require__(278);
+  var __webpack_exports__ = __nccwpck_require__(977);
   module.exports = __webpack_exports__;
 })();
