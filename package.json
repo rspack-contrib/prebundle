@@ -38,7 +38,7 @@
     "rslog": "^1.2.3",
     "typescript": "^5.7.3"
   },
-  "packageManager": "pnpm@9.15.4",
+  "packageManager": "pnpm@10.5.2",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/",
