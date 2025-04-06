@@ -20,6 +20,8 @@ export type DependencyConfig = {
   packageJsonField?: string[];
   /** Whether to ignore type definitions */
   ignoreDts?: boolean;
+  /** Whether to copy all type definitions files rather than bundle them */
+  copyDts?: boolean;
   /** Target ECMA version */
   target?: string;
   /* Callback before bundle. */
@@ -45,6 +47,7 @@ export type ParsedTask = {
   distPath: string;
   importPath: string;
   ignoreDts?: boolean;
+  copyDts?: boolean;
   prettier?: boolean;
   target: NonNullable<DependencyConfig['target']>;
   minify: NonNullable<DependencyConfig['minify']>;
