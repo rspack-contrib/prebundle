@@ -78,7 +78,7 @@ async function emitDts(task: ParsedTask, externals: Record<string, string>) {
       absolute: false,
     });
     for (const dtsFile of dtsFiles) {
-      fs.copySync(dtsFile, join(task.distPath, dtsFile));
+      fs.copySync(join(task.depPath, dtsFile), join(task.distPath, dtsFile));
     }
     return;
   }
