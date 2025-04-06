@@ -1,4 +1,4 @@
-import { dirname, join, relative } from 'node:path';
+import { dirname, join } from 'node:path';
 import ncc from '@vercel/ncc';
 import fastGlob from '../compiled/fast-glob/index.js';
 import fs from '../compiled/fs-extra/index.js';
@@ -73,14 +73,12 @@ async function emitDts(task: ParsedTask, externals: Record<string, string>) {
   }
 
   if (task.copyDts) {
-    const dtsFiles = fastGlob.sync(join(task.depPath, '**/*.d.ts'), {
-      absolute: true,
+    const dtsFiles = fastGlob.sync('**/*.d.ts', {
+      cwd: task.depPath,
+      absolute: false,
     });
     for (const dtsFile of dtsFiles) {
-      fs.copySync(
-        dtsFile,
-        join(task.distPath, relative(task.depPath, dtsFile)),
-      );
+      fs.copySync(dtsFile, join(task.distPath, dtsFile));
     }
     return;
   }
