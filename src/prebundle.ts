@@ -1,6 +1,6 @@
 import { dirname, join } from 'node:path';
 import ncc from '@vercel/ncc';
-import fastGlob from '../compiled/fast-glob/index.js';
+import fastGlob from 'fast-glob';
 import fs from '../compiled/fs-extra/index.js';
 import rslog from '../compiled/rslog/index.js';
 import { DEFAULT_EXTERNALS, NODE_BUILTINS } from './constant.js';
@@ -53,6 +53,15 @@ async function emitIndex(code: string, distPath: string, prettier?: boolean) {
   }
 }
 
+const getTypes = (json: Record<string, string>): string | null =>
+  (json &&
+    (json.types ||
+      json.typing ||
+      json.typings ||
+      // for those who use `exports` only
+      getTypes((json as any).exports?.['.']))) ||
+  null;
+
 async function emitDts(task: ParsedTask, externals: Record<string, string>) {
   const outputDefaultDts = () => {
     fs.outputFileSync(join(task.distPath, 'index.d.ts'), 'export = any;\n');
@@ -63,14 +72,18 @@ async function emitDts(task: ParsedTask, externals: Record<string, string>) {
     return;
   }
 
-  const getTypes = (json: Record<string, string>): string | null =>
-    (json &&
-      (json.types ||
-        json.typing ||
-        json.typings ||
-        // for those who use `exports` only
-        getTypes((json as any).exports?.['.']))) ||
-    null;
+  if (task.copyDts) {
+    const dtsFiles = fastGlob.sync(join(task.depPath, '**/*.d.ts'), {
+      absolute: true,
+    });
+    for (const dtsFile of dtsFiles) {
+      fs.copySync(
+        dtsFile,
+        join(task.distPath, dtsFile.replace(task.depPath, '')),
+      );
+    }
+    return;
+  }
 
   const getInput = () => {
     const pkgPath = join(task.depPath, 'package.json');
@@ -177,7 +190,7 @@ function emitPackageJson(
     pickedPackageJson.name = task.depName;
   }
 
-  pickedPackageJson.types = 'index.d.ts';
+  pickedPackageJson.types = task.copyDts ? getTypes(packageJson) : 'index.d.ts';
 
   pickedPackageJson.type = 'commonjs';
 

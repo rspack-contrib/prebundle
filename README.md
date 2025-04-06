@@ -186,6 +186,17 @@ export default {
 };
 ```
 
+### copyDts
+
+Copy all type definitions files rather than bundle them via `rollup-plugin-dts`.
+
+```ts
+// prebundle.config.mjs
+export default {
+  dependencies: [{ name: 'foo', copyDts: true }],
+};
+```
+
 ### target
 
 Target ECMAScript version, default `es2021`.
