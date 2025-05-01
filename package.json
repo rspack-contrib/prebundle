@@ -25,20 +25,20 @@
   "dependencies": {
     "@vercel/ncc": "0.38.3",
     "prettier": "^3.5.3",
-    "rollup": "^4.38.0",
+    "rollup": "^4.40.1",
     "rollup-plugin-dts": "^6.2.1",
     "terser": "^5.39.0"
   },
   "devDependencies": {
-    "@rslib/core": "0.6.1",
+    "@rslib/core": "0.6.8",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "22.13.14",
+    "@types/node": "22.15.3",
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.0",
     "rslog": "^1.2.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
-  "packageManager": "pnpm@10.7.0",
+  "packageManager": "pnpm@10.10.0",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/",
