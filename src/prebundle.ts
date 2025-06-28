@@ -282,7 +282,7 @@ export async function prebundle(
     cache: enableCache ? join(nodeModulesPath, '.cache', 'ncc-cache') : false,
   });
 
-  await emitIndex(code, task.distPath, task.prettier);
+  await emitIndex(code, task.distPath, task.prettier && !task.minify);
   emitAssets(assets, task.distPath);
   await emitDts(task, mergedExternals);
   emitLicense(task);
