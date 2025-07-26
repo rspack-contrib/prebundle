@@ -213,6 +213,22 @@ export default {
 };
 ```
 
+### dtsOnly
+
+Only bundle the dts files, default `false`.
+
+```ts
+// prebundle.config.mjs
+export default {
+  dependencies: [
+    {
+      name: 'foo',
+      dtsOnly: 'true',
+    },
+  ],
+};
+```
+
 ### prettier
 
 Whether to prettier the code and strip comments, default `false`.

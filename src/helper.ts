@@ -74,6 +74,7 @@ export function parseTasks(
         ignoreDts: dep.ignoreDts,
         copyDts: dep.copyDts,
         externals: dep.externals ?? {},
+        dtsOnly: dep.dtsOnly ?? false,
         dtsExternals: dep.dtsExternals ?? [],
         emitFiles: dep.emitFiles ?? [],
         prettier: dep.prettier ?? globalPrettier,

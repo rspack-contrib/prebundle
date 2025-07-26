@@ -10,6 +10,8 @@ export type DependencyConfig = {
   minify?: boolean;
   /** Externals to leave as requires of the build. */
   externals?: Record<string, string>;
+  /** Only bundle the dts files */
+  dtsOnly?: boolean;
   /** Externals types */
   dtsExternals?: Array<string | RegExp>;
   /** Whether to prettier the code and strip comments */
@@ -47,6 +49,7 @@ export type ParsedTask = {
   distPath: string;
   importPath: string;
   ignoreDts?: boolean;
+  dtsOnly?: boolean;
   copyDts?: boolean;
   prettier?: boolean;
   target: NonNullable<DependencyConfig['target']>;
