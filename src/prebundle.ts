@@ -73,7 +73,7 @@ async function emitDts(task: ParsedTask, externals: Record<string, string>) {
   }
 
   if (task.copyDts) {
-    const dtsFiles = fastGlob.sync('**/*.d.ts', {
+    const dtsFiles = fastGlob.sync('**/*.d.{ts,cts}', {
       cwd: task.depPath,
       absolute: false,
     });
