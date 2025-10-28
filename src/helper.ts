@@ -26,9 +26,22 @@ export function findDepPath(name: string) {
 }
 
 export const resolveConfig = async () => {
-  const configPath = join(cwd, 'prebundle.config.mjs');
-  const config = await import(pathToFileURL(configPath).href);
-  return config.default as Config;
+  const configFiles = [
+    'prebundle.config.ts',
+    'prebundle.config.mts',
+    'prebundle.config.mjs',
+    'prebundle.config.js',
+  ] as const;
+
+  for (const filename of configFiles) {
+    const configPath = join(cwd, filename);
+    if (fs.existsSync(configPath)) {
+      const config = await import(pathToFileURL(configPath).href);
+      return config.default as Config;
+    }
+  }
+
+  throw new Error('Unable to locate prebundle config file.');
 };
 
 export function parseTasks(

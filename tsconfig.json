@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "baseUrl": "./",
     "target": "ES2021",
     "lib": ["DOM", "ESNext"],
     "allowJs": true,

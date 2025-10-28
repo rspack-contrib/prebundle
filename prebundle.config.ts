@@ -1,6 +1,5 @@
-// @ts-check
+import type { Config } from './src/types.js';
 
-/** @type {import('./src/types').Config} */
 export default {
   prettier: true,
   dependencies: [
@@ -11,4 +10,4 @@ export default {
       ignoreDts: true,
     },
   ],
-};
+} satisfies Config;
