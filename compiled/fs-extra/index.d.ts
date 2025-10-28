@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import * as fs from 'fs';
-import { readFile as readFile$2, readFileSync as readFileSync$1, writeFile as writeFile$2, writeFileSync as writeFileSync$1, PathLike } from 'fs';
+import { PathLike, readFile as readFile$2, readFileSync as readFileSync$1, writeFile as writeFile$2, writeFileSync as writeFileSync$1 } from 'fs';
 export * from 'fs';
 import { Url } from 'url';
 
@@ -1060,4 +1060,5 @@ interface MoveOptions {
 
 type JsonOutputOptions = fs.WriteFileOptions & StringifyOptions;
 
-export { type CopyFilterAsync, type CopyFilterSync, type CopyOptions, type CopyOptionsSync, type EnsureDirOptions, type JsonOutputOptions, type JFReadOptions as JsonReadOptions, type JFWriteOptions as JsonWriteOptions, type MoveOptions, type NoParamCallbackWithUndefined, type SymlinkType, access, appendFile, chmod, chown, close, copy, copyFile, copySync, createFile, createFileSync, createLink, createLinkSync, createSymlink, createSymlinkSync, emptyDir, emptyDirSync, emptydir, emptydirSync, ensureDir, ensureDirSync, ensureFile, ensureFileSync, ensureLink, ensureLinkSync, ensureSymlink, ensureSymlinkSync, exists, fchmod, fchown, fdatasync, fstat, fsync, ftruncate, futimes, lchmod, lchown, link, lstat, mkdir, mkdirp, mkdirpSync, mkdirs, mkdirsSync, mkdtemp, move, moveSync, open, opendir, outputFile, outputFileSync, outputJSON, outputJSONSync, outputJson, outputJsonSync, pathExists, pathExistsSync, read, readFile, readJSON, readJSONSync, readJson, readJsonSync, readdir, readlink, readv, realpath, remove, removeSync, rename, rm, rmdir, stat, symlink, truncate, unlink, utimes, write, writeFile, writeJSON, writeJSONSync, writeJson, writeJsonSync, writev };
+export { access, appendFile, chmod, chown, close, copy, copyFile, copySync, createFile, createFileSync, createLink, createLinkSync, createSymlink, createSymlinkSync, emptyDir, emptyDirSync, emptydir, emptydirSync, ensureDir, ensureDirSync, ensureFile, ensureFileSync, ensureLink, ensureLinkSync, ensureSymlink, ensureSymlinkSync, exists, fchmod, fchown, fdatasync, fstat, fsync, ftruncate, futimes, lchmod, lchown, link, lstat, mkdir, mkdirp, mkdirpSync, mkdirs, mkdirsSync, mkdtemp, move, moveSync, open, opendir, outputFile, outputFileSync, outputJSON, outputJSONSync, outputJson, outputJsonSync, pathExists, pathExistsSync, read, readFile, readJSON, readJSONSync, readJson, readJsonSync, readdir, readlink, readv, realpath, remove, removeSync, rename, rm, rmdir, stat, symlink, truncate, unlink, utimes, write, writeFile, writeJSON, writeJSONSync, writeJson, writeJsonSync, writev };
+export type { CopyFilterAsync, CopyFilterSync, CopyOptions, CopyOptionsSync, EnsureDirOptions, JsonOutputOptions, JFReadOptions as JsonReadOptions, JFWriteOptions as JsonWriteOptions, MoveOptions, NoParamCallbackWithUndefined, SymlinkType };

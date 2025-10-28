@@ -32,7 +32,7 @@ declare let LOG_TYPES: {
         color: ColorFn;
     };
     log: {
-        level: "log";
+        level: "info";
     };
     debug: {
         label: string;
@@ -41,7 +41,7 @@ declare let LOG_TYPES: {
     };
 };
 
-type LogLevel = 'error' | 'warn' | 'info' | 'log' | 'verbose';
+type LogLevel = 'silent' | 'error' | 'warn' | 'info' | 'log' | 'verbose';
 type LogMessage = unknown;
 interface LogType {
     label?: string;
@@ -63,4 +63,5 @@ declare let createLogger: (options?: Options) => Logger;
 
 declare let logger: Logger;
 
-export { type LogFunction, type LogLevel, type LogMessage, type LogType, type Logger, type Options, createLogger, logger };
+export { createLogger, logger };
+export type { LogFunction, LogLevel, LogMessage, LogType, Logger, Options };

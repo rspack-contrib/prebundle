@@ -1,110 +1,97 @@
 (() => {
   "use strict";
   var __webpack_modules__ = {
-    857: (module) => {
-      module.exports = require("os");
+    161: (module) => {
+      module.exports = require("node:os");
     },
-    932: (module) => {
-      module.exports = require("process");
+    708: (module) => {
+      module.exports = require("node:process");
     },
-    18: (module) => {
-      module.exports = require("tty");
+    66: (module) => {
+      module.exports = require("node:tty");
     },
-    436: (module, __unused_webpack_exports, __nccwpck_require__) => {
-      var __create = Object.create;
-      var __defProp = Object.defineProperty;
-      var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-      var __getOwnPropNames = Object.getOwnPropertyNames;
-      var __getProtoOf = Object.getPrototypeOf;
-      var __hasOwnProp = Object.prototype.hasOwnProperty;
-      var __export = (target, all) => {
-        for (var name in all)
-          __defProp(target, name, { get: all[name], enumerable: true });
-      };
-      var __copyProps = (to, from, except, desc) => {
-        if ((from && typeof from === "object") || typeof from === "function") {
-          for (let key of __getOwnPropNames(from))
-            if (!__hasOwnProp.call(to, key) && key !== except)
-              __defProp(to, key, {
-                get: () => from[key],
-                enumerable:
-                  !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+    838: (__unused_webpack_module, exports, __nccwpck_require__) => {
+      var __nested_webpack_require_18__ = {};
+      (() => {
+        __nested_webpack_require_18__.d = (exports1, definition) => {
+          for (var key in definition)
+            if (
+              __nested_webpack_require_18__.o(definition, key) &&
+              !__nested_webpack_require_18__.o(exports1, key)
+            )
+              Object.defineProperty(exports1, key, {
+                enumerable: true,
+                get: definition[key],
               });
-        }
-        return to;
-      };
-      var __toESM = (mod, isNodeMode, target) => (
-        (target = mod != null ? __create(__getProtoOf(mod)) : {}),
-        __copyProps(
-          isNodeMode || !mod || !mod.__esModule
-            ? __defProp(target, "default", { value: mod, enumerable: true })
-            : target,
-          mod,
-        )
-      );
-      var __toCommonJS = (mod) =>
-        __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-      var src_exports = {};
-      __export(src_exports, {
+        };
+      })();
+      (() => {
+        __nested_webpack_require_18__.o = (obj, prop) =>
+          Object.prototype.hasOwnProperty.call(obj, prop);
+      })();
+      (() => {
+        __nested_webpack_require_18__.r = (exports1) => {
+          if ("undefined" != typeof Symbol && Symbol.toStringTag)
+            Object.defineProperty(exports1, Symbol.toStringTag, {
+              value: "Module",
+            });
+          Object.defineProperty(exports1, "__esModule", { value: true });
+        };
+      })();
+      var __nested_webpack_exports__ = {};
+      __nested_webpack_require_18__.r(__nested_webpack_exports__);
+      __nested_webpack_require_18__.d(__nested_webpack_exports__, {
+        logger: () => src_logger,
         createLogger: () => createLogger,
-        logger: () => logger,
       });
-      module.exports = __toCommonJS(src_exports);
-      var import_node_process = __toESM(__nccwpck_require__(932));
-      var import_node_os = __toESM(__nccwpck_require__(857));
-      var import_node_tty = __toESM(__nccwpck_require__(18));
+      const external_node_process_namespaceObject = __nccwpck_require__(708);
+      const external_node_os_namespaceObject = __nccwpck_require__(161);
+      const external_node_tty_namespaceObject = __nccwpck_require__(66);
       function hasFlag(
         flag,
         argv = globalThis.Deno
           ? globalThis.Deno.args
-          : import_node_process.default.argv,
+          : external_node_process_namespaceObject.argv,
       ) {
         const prefix = flag.startsWith("-")
           ? ""
-          : flag.length === 1
+          : 1 === flag.length
             ? "-"
             : "--";
         const position = argv.indexOf(prefix + flag);
         const terminatorPosition = argv.indexOf("--");
         return (
-          position !== -1 &&
-          (terminatorPosition === -1 || position < terminatorPosition)
+          -1 !== position &&
+          (-1 === terminatorPosition || position < terminatorPosition)
         );
       }
-      var { env } = import_node_process.default;
-      var flagForceColor;
+      const { env } = external_node_process_namespaceObject;
+      let flagForceColor;
       if (
         hasFlag("no-color") ||
         hasFlag("no-colors") ||
         hasFlag("color=false") ||
         hasFlag("color=never")
-      ) {
+      )
         flagForceColor = 0;
-      } else if (
+      else if (
         hasFlag("color") ||
         hasFlag("colors") ||
         hasFlag("color=true") ||
         hasFlag("color=always")
-      ) {
+      )
         flagForceColor = 1;
-      }
       function envForceColor() {
-        if ("FORCE_COLOR" in env) {
-          if (env.FORCE_COLOR === "true") {
-            return 1;
-          }
-          if (env.FORCE_COLOR === "false") {
-            return 0;
-          }
-          return env.FORCE_COLOR.length === 0
-            ? 1
-            : Math.min(Number.parseInt(env.FORCE_COLOR, 10), 3);
-        }
+        if (!("FORCE_COLOR" in env)) return;
+        if ("true" === env.FORCE_COLOR) return 1;
+        if ("false" === env.FORCE_COLOR) return 0;
+        if (0 === env.FORCE_COLOR.length) return 1;
+        const level = Math.min(Number.parseInt(env.FORCE_COLOR, 10), 3);
+        if (![0, 1, 2, 3].includes(level)) return;
+        return level;
       }
       function translateLevel(level) {
-        if (level === 0) {
-          return false;
-        }
+        if (0 === level) return false;
         return {
           level,
           hasBasic: true,
@@ -117,99 +104,73 @@
         { streamIsTTY, sniffFlags = true } = {},
       ) {
         const noFlagForceColor = envForceColor();
-        if (noFlagForceColor !== void 0) {
-          flagForceColor = noFlagForceColor;
-        }
+        if (void 0 !== noFlagForceColor) flagForceColor = noFlagForceColor;
         const forceColor = sniffFlags ? flagForceColor : noFlagForceColor;
-        if (forceColor === 0) {
-          return 0;
-        }
+        if (0 === forceColor) return 0;
         if (sniffFlags) {
           if (
             hasFlag("color=16m") ||
             hasFlag("color=full") ||
             hasFlag("color=truecolor")
-          ) {
+          )
             return 3;
-          }
-          if (hasFlag("color=256")) {
-            return 2;
-          }
+          if (hasFlag("color=256")) return 2;
         }
-        if ("TF_BUILD" in env && "AGENT_NAME" in env) {
-          return 1;
-        }
-        if (haveStream && !streamIsTTY && forceColor === void 0) {
-          return 0;
-        }
+        if ("TF_BUILD" in env && "AGENT_NAME" in env) return 1;
+        if (haveStream && !streamIsTTY && void 0 === forceColor) return 0;
         const min = forceColor || 0;
-        if (env.TERM === "dumb") {
-          return min;
-        }
-        if (import_node_process.default.platform === "win32") {
-          const osRelease = import_node_os.default.release().split(".");
-          if (Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
+        if ("dumb" === env.TERM) return min;
+        if ("win32" === external_node_process_namespaceObject.platform) {
+          const osRelease = external_node_os_namespaceObject
+            .release()
+            .split(".");
+          if (Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586)
             return Number(osRelease[2]) >= 14931 ? 3 : 2;
-          }
           return 1;
         }
         if ("CI" in env) {
-          if ("GITHUB_ACTIONS" in env || "GITEA_ACTIONS" in env) {
-            return 3;
-          }
           if (
-            [
-              "TRAVIS",
-              "CIRCLECI",
-              "APPVEYOR",
-              "GITLAB_CI",
-              "BUILDKITE",
-              "DRONE",
-            ].some((sign) => sign in env) ||
-            env.CI_NAME === "codeship"
-          ) {
+            ["GITHUB_ACTIONS", "GITEA_ACTIONS", "CIRCLECI"].some(
+              (key) => key in env,
+            )
+          )
+            return 3;
+          if (
+            ["TRAVIS", "APPVEYOR", "GITLAB_CI", "BUILDKITE", "DRONE"].some(
+              (sign) => sign in env,
+            ) ||
+            "codeship" === env.CI_NAME
+          )
             return 1;
-          }
           return min;
         }
-        if ("TEAMCITY_VERSION" in env) {
+        if ("TEAMCITY_VERSION" in env)
           return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION)
             ? 1
             : 0;
-        }
-        if (env.COLORTERM === "truecolor") {
-          return 3;
-        }
-        if (env.TERM === "xterm-kitty") {
-          return 3;
-        }
+        if ("truecolor" === env.COLORTERM) return 3;
+        if ("xterm-kitty" === env.TERM) return 3;
+        if ("xterm-ghostty" === env.TERM) return 3;
         if ("TERM_PROGRAM" in env) {
           const version = Number.parseInt(
             (env.TERM_PROGRAM_VERSION || "").split(".")[0],
             10,
           );
           switch (env.TERM_PROGRAM) {
-            case "iTerm.app": {
+            case "iTerm.app":
               return version >= 3 ? 3 : 2;
-            }
-            case "Apple_Terminal": {
+            case "Apple_Terminal":
               return 2;
-            }
           }
         }
-        if (/-256(color)?$/i.test(env.TERM)) {
-          return 2;
-        }
+        if (/-256(color)?$/i.test(env.TERM)) return 2;
         if (
           /^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(
             env.TERM,
           )
-        ) {
+        )
           return 1;
-        }
-        if ("COLORTERM" in env) {
-          return 1;
-        }
+        if ("COLORTERM" in env) return 1;
         return min;
       }
       function createSupportsColor(stream, options = {}) {
@@ -219,24 +180,24 @@
         });
         return translateLevel(level);
       }
-      var supportsColor = {
+      const supportsColor = {
         stdout: createSupportsColor({
-          isTTY: import_node_tty.default.isatty(1),
+          isTTY: external_node_tty_namespaceObject.isatty(1),
         }),
         stderr: createSupportsColor({
-          isTTY: import_node_tty.default.isatty(2),
+          isTTY: external_node_tty_namespaceObject.isatty(2),
         }),
       };
-      var supports_color_default = supportsColor;
-      var colorLevel = supports_color_default.stdout
-        ? supports_color_default.stdout.level
+      const supports_color = supportsColor;
+      const colorLevel = supports_color.stdout
+        ? supports_color.stdout.level
         : 0;
-      var errorStackRegExp = /at\s.*:\d+:\d+[\s\)]*$/;
-      var anonymousErrorStackRegExp = /at\s.*\(<anonymous>\)$/;
-      var isErrorStackMessage = (message) =>
+      let errorStackRegExp = /at\s.*:\d+:\d+[\s\)]*$/;
+      let anonymousErrorStackRegExp = /at\s.*\(<anonymous>\)$/;
+      let isErrorStackMessage = (message) =>
         errorStackRegExp.test(message) ||
         anonymousErrorStackRegExp.test(message);
-      var formatter = (open, close, replace = open) =>
+      let formatter = (open, close, replace = open) =>
         colorLevel >= 2
           ? (input) => {
               let string = "" + input;
@@ -246,7 +207,7 @@
                 : open + string + close;
             }
           : String;
-      var replaceClose = (string, close, replace, index) => {
+      let replaceClose = (string, close, replace, index) => {
         let start = string.substring(0, index) + replace;
         let end = string.substring(index + close.length);
         let nextIndex = end.indexOf(close);
@@ -254,20 +215,19 @@
           ? start + replaceClose(end, close, replace, nextIndex)
           : start + end;
       };
-      var bold = formatter("[1m", "[22m", "[22m[1m");
-      var red = formatter("[31m", "[39m");
-      var green = formatter("[32m", "[39m");
-      var yellow = formatter("[33m", "[39m");
-      var magenta = formatter("[35m", "[39m");
-      var cyan = formatter("[36m", "[39m");
-      var gray = formatter("[90m", "[39m");
-      var startColor = [189, 255, 243];
-      var endColor = [74, 194, 154];
-      var isWord = (char) => !/[\s\n]/.test(char);
-      var gradient = (message) => {
-        if (colorLevel < 3) {
-          return colorLevel === 2 ? bold(cyan(message)) : message;
-        }
+      const bold = formatter("[1m", "[22m", "[22m[1m");
+      const red = formatter("[31m", "[39m");
+      const green = formatter("[32m", "[39m");
+      const yellow = formatter("[33m", "[39m");
+      const magenta = formatter("[35m", "[39m");
+      const cyan = formatter("[36m", "[39m");
+      const gray = formatter("[90m", "[39m");
+      let startColor = [189, 255, 243];
+      let endColor = [74, 194, 154];
+      let isWord = (char) => !/[\s\n]/.test(char);
+      let gradient = (message) => {
+        if (colorLevel < 3)
+          return 2 === colorLevel ? bold(cyan(message)) : message;
         let chars = [...message];
         let steps = chars.filter(isWord).length;
         let r = startColor[0];
@@ -287,26 +247,29 @@
         }
         return bold(output);
       };
-      var LOG_LEVEL = { error: 0, warn: 1, info: 2, log: 3, verbose: 4 };
-      var LOG_TYPES = {
+      let LOG_LEVEL = {
+        silent: -1,
+        error: 0,
+        warn: 1,
+        info: 2,
+        log: 2,
+        verbose: 3,
+      };
+      let LOG_TYPES = {
         error: { label: "error", level: "error", color: red },
         warn: { label: "warn", level: "warn", color: yellow },
         info: { label: "info", level: "info", color: cyan },
         start: { label: "start", level: "info", color: cyan },
         ready: { label: "ready", level: "info", color: green },
         success: { label: "success", level: "info", color: green },
-        log: { level: "log" },
+        log: { level: "info" },
         debug: { label: "debug", level: "verbose", color: magenta },
       };
-      var createLogger = (options = {}) => {
-        let maxLevel = options.level || "log";
+      let createLogger = (options = {}) => {
+        let maxLevel = options.level || "info";
         let log = (type, message, ...args) => {
-          if (LOG_LEVEL[LOG_TYPES[type].level] > LOG_LEVEL[maxLevel]) {
-            return;
-          }
-          if (message === void 0 || message === null) {
-            return console.log();
-          }
+          if (LOG_LEVEL[LOG_TYPES[type].level] > LOG_LEVEL[maxLevel]) return;
+          if (null == message) return console.log();
           let logType = LOG_TYPES[type];
           let label = "";
           let text = "";
@@ -314,43 +277,42 @@
             label = (logType.label || "").padEnd(7);
             label = bold(logType.color ? logType.color(label) : label);
           }
-          if (message instanceof Error) {
+          if (message instanceof Error)
             if (message.stack) {
               let [name, ...rest] = message.stack.split("\n");
-              if (name.startsWith("Error: ")) {
-                name = name.slice(7);
-              }
+              if (name.startsWith("Error: ")) name = name.slice(7);
               text = `${name}\n${gray(rest.join("\n"))}`;
-            } else {
-              text = message.message;
-            }
-          } else if (logType.level === "error" && typeof message === "string") {
+            } else text = message.message;
+          else if ("error" === logType.level && "string" == typeof message) {
             let lines = message.split("\n");
             text = lines
               .map((line) => (isErrorStackMessage(line) ? gray(line) : line))
               .join("\n");
-          } else {
-            text = `${message}`;
-          }
+          } else text = `${message}`;
           console.log(label.length ? `${label} ${text}` : text, ...args);
         };
-        let logger2 = { greet: (message) => log("log", gradient(message)) };
+        let logger = { greet: (message) => log("log", gradient(message)) };
         Object.keys(LOG_TYPES).forEach((key) => {
-          logger2[key] = (...args) => log(key, ...args);
+          logger[key] = (...args) => log(key, ...args);
         });
-        Object.defineProperty(logger2, "level", {
+        Object.defineProperty(logger, "level", {
           get: () => maxLevel,
           set(val) {
             maxLevel = val;
           },
         });
-        logger2.override = (customLogger) => {
-          Object.assign(logger2, customLogger);
+        logger.override = (customLogger) => {
+          Object.assign(logger, customLogger);
         };
-        return logger2;
+        return logger;
       };
-      var logger = createLogger();
-      0 && 0;
+      let src_logger = createLogger();
+      exports.createLogger = __nested_webpack_exports__.createLogger;
+      exports.logger = __nested_webpack_exports__.logger;
+      for (var __webpack_i__ in __nested_webpack_exports__)
+        if (-1 === ["createLogger", "logger"].indexOf(__webpack_i__))
+          exports[__webpack_i__] = __nested_webpack_exports__[__webpack_i__];
+      Object.defineProperty(exports, "__esModule", { value: true });
     },
   };
   var __webpack_module_cache__ = {};
@@ -375,6 +337,6 @@
   }
   if (typeof __nccwpck_require__ !== "undefined")
     __nccwpck_require__.ab = __dirname + "/";
-  var __webpack_exports__ = __nccwpck_require__(436);
+  var __webpack_exports__ = __nccwpck_require__(838);
   module.exports = __webpack_exports__;
 })();
