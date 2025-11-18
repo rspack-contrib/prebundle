@@ -1,4 +1,4 @@
-import { dirname, extname, join } from 'node:path';
+import { dirname, extname, join, resolve } from 'node:path';
 import fs from '../compiled/fs-extra/index.js';
 import { cwd, DIST_DIR } from './constant.js';
 import type { Config, DependencyConfig, ParsedTask } from './types.js';
@@ -9,7 +9,7 @@ const require = createRequire(import.meta.url);
 
 export function findDepPath(name: string) {
   try {
-    let entry = dirname(require.resolve(join(name), { paths: [cwd] }));
+    let entry = dirname(require.resolve(name, { paths: [cwd] }));
 
     while (!dirname(entry).endsWith('node_modules')) {
       entry = dirname(entry);
@@ -25,20 +25,27 @@ export function findDepPath(name: string) {
   }
 }
 
-export const resolveConfig = async () => {
-  const configFiles = [
-    'prebundle.config.ts',
-    'prebundle.config.mts',
-    'prebundle.config.mjs',
-    'prebundle.config.js',
-  ] as const;
+export const resolveConfig = async (configFile?: string) => {
+  const configFiles = configFile
+    ? [resolve(cwd, configFile)]
+    : (
+        [
+          'prebundle.config.ts',
+          'prebundle.config.mts',
+          'prebundle.config.mjs',
+          'prebundle.config.js',
+        ] as const
+      ).map((filename) => join(cwd, filename));
 
   for (const filename of configFiles) {
-    const configPath = join(cwd, filename);
-    if (fs.existsSync(configPath)) {
-      const config = await import(pathToFileURL(configPath).href);
-      return config.default as Config;
+    if (fs.existsSync(filename)) {
+      const config = await import(pathToFileURL(filename).href);
+      return (config.default ?? config) as Config;
     }
+  }
+
+  if (configFile) {
+    throw new Error(`Unable to locate prebundle config file at: ${configFile}`);
   }
 
   throw new Error('Unable to locate prebundle config file.');
